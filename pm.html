@@ -9,67 +9,69 @@
 </head>
 
 <body>
-    <header class="bar">
-        <div class="logo">
-            <h1>Pocket Mechanic</h1>
+    <section>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="#">Pocket Mechanic</a></div>
+            <ul>
+                <li><a href="pm.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="saved.html">SavedItems</a></li>
+            </ul>
         </div>
-        <nav class="links">
-            <a href="pm.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-            <a href="saved.html">Saved Items</a>
-        </nav>
-    </header>
+    </nav>
+    </section>
 
 
-        <section id="view-home" class="view active-view">
-            <h1>Welcome!</h1>
-            <p class="muted">
-                Store your cars, bikes, or any vehicle. Then add links for maintenance, accessories, and mods.
-            </p>
-            <div class="cards">
-                <div class="card">
-                    <h2>Total Vehicles</h2>
-                    <p id="total vehicles">0</p>
-                </div>
-                <div class="card">
-                    <h2>Total Saved Links</h2>
-                    <p id="total-links">0</p>
-                </div>
+    <section id="view-home" class="view active-view">
+        <h1>Welcome!</h1>
+        <p class="muted">
+            Store your cars, bikes, or any vehicle. Then add links for maintenance, accessories, and mods.
+        </p>
+        <div class="cards">
+            <div class="card">
+                <h2>Total Vehicles</h2>
+                <p id="total vehicles">0</p>
             </div>
-        </section>
-
-
-        <section id="view-vehicles" class="view">
-            <div class="header-row">
-                <h1>Your Vehicles</h1>
-                <button id="add-vehicles-btn" class="primary-btn">+ Add Vehicles</button>
+            <div class="card">
+                <h2>Total Saved Links</h2>
+                <p id="total-links">0</p>
             </div>
-
-            <div id="vehicle-list" class="cards"></div>
-
-
-            <div id="vehicle-form" class="panel hidden">
-                <h2>Add Vehicle</h2>
-                <label>Nickname
-                    <input type="text" id="veh-name" />
-                </label>
-                <label>Year
-                    <input type="number" id="veh-year" />
-                </label>
-                <label>Make
-                    <input type="text" id="veh-make" />
-                </label>
-                <label>Model
-                    <input type="text" id="veh-model" />
-                </label>
-                <button id="save-vehicle" class="primary-btn full">Save Vehicle</button>
-            </div>
-        </section>
+        </div>
+    </section>
 
 
-        
-        <script src="pm.js"></script>
+    <section id="view-vehicles" class="view">
+        <div class="header-row">
+            <h1>Your Vehicles</h1>
+            <button id="add-vehicles-btn" class="primary-btn">+ Add Vehicles</button>
+        </div>
+
+        <div id="vehicle-list" class="cards"></div>
+
+
+        <div id="vehicle-form" class="panel hidden">
+            <h2>Add Vehicle</h2>
+            <label>Nickname
+                <input type="text" id="veh-name" />
+            </label>
+            <label>Year
+                <input type="number" id="veh-year" />
+            </label>
+            <label>Make
+                <input type="text" id="veh-make" />
+            </label>
+            <label>Model
+                <input type="text" id="veh-model" />
+            </label>
+            <button id="save-vehicle" class="primary-btn full">Save Vehicle</button>
+        </div>
+    </section>
+
+
+
+    <script src="pm.js"></script>
 </body>
 
 </html>
