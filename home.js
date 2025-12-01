@@ -1,27 +1,22 @@
+const VEHICLES_KEY = "pocketMechanicVehicles";
+const LINKS_KEY = "pocketMechanicLinks";
+
 const addBtn = document.getElementById("add-vehicles-btn");
 const form = document.getElementById("vehicle-form");
 const saveBtn = document.getElementById("save-vehicle");
 const list = document.getElementById("vehicle-list");
-const totalVehiclesElem = document.getElementById("total-vehicles");
+const totalElem = document.getElementById("total-vehicles");
 const totalLinksElem = document.getElementById("total-links");
 
-const VEHICLES_KEY = "pocketMechanicVehicles";
-const LINKS_KEY = "pocketMechanicLinks";
-
-let vehicles = loadVehicles();
+let vehicles = JSON.parse(localStorage.getItem(VEHICLES_KEY) || "[]");
 
 renderVehicles();
-updateVehicleTotal();
-updateLinksTotal();
+updateTotalVehicles();
+updateTotalLinks();
 
 if (addBtn) {
   addBtn.addEventListener("click", () => {
-    clearInputs();
-    if (form.style.display === "block") {
-      form.style.display = "none";
-    } else {
-      form.style.display = "block";
-    }
+    form.style.display = form.style.display === "block" ? "none" : "block";
   });
 }
 
@@ -33,94 +28,59 @@ if (saveBtn) {
     const model = document.getElementById("veh-model").value.trim();
 
     if (!name || !year || !make || !model) {
-      alert("Please fill everything out.");
+      alert("Please fill in all fields!");
       return;
     }
 
     const newVehicle = {
       id: Date.now().toString(),
-      name: name,
-      year: year,
-      make: make,
-      model: model
+      name,
+      year,
+      make,
+      model
     };
 
     vehicles.push(newVehicle);
-    saveVehicles();
+    localStorage.setItem(VEHICLES_KEY, JSON.stringify(vehicles));
+
     renderVehicles();
-    updateVehicleTotal();
+    updateTotalVehicles();
 
     form.style.display = "none";
+    clearInputs();
   });
 }
-
-function loadVehicles() {
-  const raw = localStorage.getItem(VEHICLES_KEY);
-  if (!raw) return [];
-  try {
-    const data = JSON.parse(raw);
-    return Array.isArray(data) ? data : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveVehicles() {
-  localStorage.setItem(VEHICLES_KEY, JSON.stringify(vehicles));
-}
-
 function renderVehicles() {
   if (!list) return;
   list.innerHTML = "";
-
-  vehicles.forEach((v) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.textContent = v.name + " - " + v.year + " " + v.make + " " + v.model;
-    list.appendChild(card);
+  vehicles.forEach(v => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = `${v.name} - ${v.year} ${v.make} ${v.model}`;
+    list.appendChild(div);
   });
 }
 
-function updateVehicleTotal() {
-  if (!totalVehiclesElem) return;
-  totalVehiclesElem.textContent = String(vehicles.length);
+function updateTotalVehicles() {
+  if (!totalElem) return;
+  totalElem.textContent = String(vehicles.length);
+}
+
+function updateTotalLinks() {
+  if (!totalLinksElem) return;
+  const data = JSON.parse(localStorage.getItem(LINKS_KEY) || "{}");
+  let total = 0;
+  for (const vehicle of Object.values(data)) {
+    total += (vehicle.maintenance?.length || 0)
+           + (vehicle.accessories?.length || 0)
+           + (vehicle.modifications?.length || 0);
+  }
+  totalLinksElem.textContent = String(total);
 }
 
 function clearInputs() {
-  const nameInput = document.getElementById("veh-name");
-  const yearInput = document.getElementById("veh-year");
-  const makeInput = document.getElementById("veh-make");
-  const modelInput = document.getElementById("veh-model");
-
-  if (nameInput) nameInput.value = "";
-  if (yearInput) yearInput.value = "";
-  if (makeInput) makeInput.value = "";
-  if (modelInput) modelInput.value = "";
-}
-
-function updateLinksTotal() {
-  if (!totalLinksElem) return;
-
-  const raw = localStorage.getItem(LINKS_KEY);
-  if (!raw) {
-    totalLinksElem.textContent = "0";
-    return;
-  }
-
-  try {
-    const data = JSON.parse(raw) || {};
-    let total = 0;
-
-    Object.values(data).forEach((sections) => {
-      if (!sections) return;
-      const maint = sections.maintenance || [];
-      const acc = sections.accessories || [];
-      const mods = sections.modifications || [];
-      total += maint.length + acc.length + mods.length;
-    });
-
-    totalLinksElem.textContent = String(total);
-  } catch (e) {
-    totalLinksElem.textContent = "0";
-  }
+  ["veh-name", "veh-year", "veh-make", "veh-model"].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) input.value = "";
+  });
 }
