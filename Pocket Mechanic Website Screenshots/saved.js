@@ -33,7 +33,8 @@ if (vehicleSelect) {
     renderLists();
   });
 }
-addLinkButtons.forEach((btn) => {
+
+addLinkButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     if (!currentVehicleId) {
       alert("Add a vehicle on the Home page, then select it here first.");
@@ -41,11 +42,7 @@ addLinkButtons.forEach((btn) => {
     }
 
     currentSection = btn.getAttribute("data-section"); 
-
-    if (!currentSection) {
-      alert("Could not determine which section you clicked.");
-      return;
-    }
+    if (!currentSection) return;
 
     const niceName =
       currentSection.charAt(0).toUpperCase() + currentSection.slice(1);
@@ -72,12 +69,10 @@ if (saveLinkBtn) {
       alert("Please select a vehicle first.");
       return;
     }
-
     if (!currentSection) {
       alert("Please choose a section.");
       return;
     }
-
     if (!url) {
       alert("Please paste a website URL.");
       return;
@@ -91,11 +86,7 @@ if (saveLinkBtn) {
       };
     }
 
-    linksByVehicle[currentVehicleId][currentSection].push({
-      title: title,
-      url: url
-    });
-
+    linksByVehicle[currentVehicleId][currentSection].push({ title, url });
     saveLinks();
     renderLists();
 
@@ -104,20 +95,20 @@ if (saveLinkBtn) {
     linkUrlInput.value = "";
   });
 }
+
 function loadVehicles() {
   const raw = localStorage.getItem(VEHICLES_KEY);
   if (!raw) return [];
   try {
     const data = JSON.parse(raw);
     return Array.isArray(data) ? data : [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }
 
 function populateVehicleSelect() {
   if (!vehicleSelect) return;
-
   vehicleSelect.innerHTML = "";
 
   if (!vehicles || vehicles.length === 0) {
@@ -131,10 +122,10 @@ function populateVehicleSelect() {
 
   vehicleSelect.disabled = false;
 
-  vehicles.forEach((v) => {
+  vehicles.forEach(v => {
     const opt = document.createElement("option");
     opt.value = v.id;
-    opt.textContent = v.name + " - " + v.year + " " + v.make + " " + v.model;
+    opt.textContent = `${v.name} - ${v.year} ${v.make} ${v.model}`;
     vehicleSelect.appendChild(opt);
   });
 }
@@ -145,7 +136,7 @@ function loadLinks() {
   try {
     const data = JSON.parse(raw);
     return data && typeof data === "object" ? data : {};
-  } catch (e) {
+  } catch {
     return {};
   }
 }
@@ -159,9 +150,7 @@ function renderLists() {
   clearList(listAccessories);
   clearList(listModifications);
 
-  if (!currentVehicleId || !linksByVehicle[currentVehicleId]) {
-    return;
-  }
+  if (!currentVehicleId || !linksByVehicle[currentVehicleId]) return;
 
   const data = linksByVehicle[currentVehicleId];
 
@@ -177,7 +166,7 @@ function clearList(ul) {
 
 function renderSectionList(ul, items) {
   if (!ul) return;
-  items.forEach((item) => {
+  items.forEach(item => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.href = item.url;
@@ -188,4 +177,4 @@ function renderSectionList(ul, items) {
     ul.appendChild(li);
   });
 }
-            
+   
