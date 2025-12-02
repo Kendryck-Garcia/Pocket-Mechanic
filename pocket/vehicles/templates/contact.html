@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="view">
+    <h1>Contact Us</h1>
+
+    <form class="contact-form">
+        <label>First Name:</label>
+        <input type="text" name="first_name" class="input-field" required>
+
+        <label>Last Name:</label>
+        <input type="text" name="last_name" class="input-field" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" class="input-field" required>
+        <br>
+        <label class="checkbox-label">
+            Join our updates<input type="checkbox" name="join"> 
+        </label>
+
+        <button type="submit" class="primary-btn full">Submit</button>
+    </form>
+</section>
+
+{% endblock %}

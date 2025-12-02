@@ -1,0 +1,155 @@
+* {
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: white;
+    margin: 0;
+    color: white;
+}
+
+.navbar {
+    background-color: #0e0e10;
+    padding: 15px 20px;
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo a {
+    font-size: 32px;
+    font-weight: 700;
+    color: #00a8ff;
+    letter-spacing: 1px;
+    transition: background 0.25s ease, 
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+}
+
+li a {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 25px;
+    transition: color 0.3s ease;
+}
+
+li a:hover {
+    color: #00a8ff;
+}
+
+
+.view {
+    width: 90%;
+    max-width: 850px;
+    margin: 40px auto;
+    background: #0e0e10;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.35);
+}
+
+
+.panel {
+    background: #0e0e10;
+    padding: 22px;
+    border-radius: 12px;
+    margin-top: 32px;
+    border: 1px solid #0e0e10;
+}
+
+.panel h2 {
+    margin-bottom: 14px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #00a8ff;
+}
+
+
+.panel label {
+    display: block;
+    margin-top: 12px;
+    color: white;
+    font-size: 16px;
+}
+
+.panel input,
+.panel select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #0e0e10;
+    color: white;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.panel input:focus,
+.panel select:focus {
+    outline: 2px solid #007bff;
+}
+
+.primary-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    margin-top: 16px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background 0.25s ease, 
+}
+
+.primary-btn:hover {
+    transform: translateY(-3xp);
+    background: #006adb;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin-bottom: 18px;
+    background: #20262b;
+    padding: 15px 20px;
+    border-radius: 30px;
+    border: 1px solid #2b3239;
+}
+
+a {
+    color: red;
+    word-break: break-all;
+}
+
+li strong {
+    display: block;
+    font-size: 17px;
+    color: #e9e9e9;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 600px) {
+    .logo a {
+        font-size: 26px;
+    }
+    li a {
+        font-size: 16px;
+    }
+}
+

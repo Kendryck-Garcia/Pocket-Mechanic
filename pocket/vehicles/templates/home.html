@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="view">
+    <h1>Home</h1>
+
+    <div class="panel">
+        <h2>Find, Save, and Organize Your Vehicle!</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="car">
+
+            <label>Nickname:</label>
+            <input type="text" name="nickname">
+
+            <label>Year:</label>
+            <input type="number" name="year">
+
+            <label>Make:</label>
+            <input type="text" name="make">
+
+            <label>Model:</label>
+            <input type="text" name="model">
+
+            <button type="submit" class="primary-btn full">Save Vehicle</button>
+        </form>
+    </div>
+
+    <hr>
+
+<div class="panel">
+    <h2>Add Part</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="part">
+
+        <label>Part url:</label>
+        <input type="text" name="part_name">
+
+        <label>Select Category</label>
+        <select name="category">
+            <option value="maintenance">Maintenance</option>
+            <option value="accessories">Accessories</option>
+            <option value="mods">Modifications</option>
+        </select>
+
+        <label>Select Vehicle</label>
+        <select name="car_id">
+            {% for c in cars %}
+            <option value="{{ c.id }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="primary-btn full">Save Part</button>
+    </form>
+</div>
+
+    <hr>
+
+    <div class="panel">
+        <h2>Search With AI</h2>
+
+        <form method="get">
+            <input type="hidden" name="ai_search" value="1">
+
+            <label>Select Vehicle</label>
+            <select name="search_car_id" required>
+                <option value="">Select a vehicle</option>
+                {% for c in cars %}
+                <option value="{{ c.id }}"
+                    {% if selected_car_id and selected_car_id|stringformat:"s" == c.id|stringformat:"s" %}selected{% endif %}>
+                    {{ c.year }} {{ c.make }} {{ c.model }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <label>Search For Parts:</label>
+            <input type="text" name="query" placeholder="e.g. brake pads" value="{{ query }}">
+
+            <button type="submit" class="primary-btn full">Search with AI</button>
+        </form>
+
+        {% if ai_results %}
+        <h3>AI Results:</h3>
+        <ul>
+            {% for r in ai_results %}
+            <li>
+    <strong>{{ r.title }}</strong><br>
+    <a href="{{ r.link }}" target="_blank">{{ r.link }}</a>
+
+    <form method="post" style="display:inline-block; margin-top: 5px;">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="part">
+        <input type="hidden" name="car_id" value="{{ selected_car_id }}">
+        <input type="hidden" name="part_name" value="{{ r.title }}">
+
+        <select name="category" class="mini-select">
+            <option value="maintenance">Maintenance</option>
+            <option value="accessories">Accessories</option>
+            <option value="mods">Modifications</option>
+        </select>
+
+        <button type="submit" class="primary-btn">Save</button>
+    </form>
+</li>
+
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
