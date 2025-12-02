@@ -12,7 +12,7 @@ body {
 
 .navbar {
     background-color: #0e0e10;
-    padding: 15px 20px;
+    padding: 15px 15px;
 }
 
 .navdiv {
@@ -26,7 +26,7 @@ body {
     font-weight: 700;
     color: #00a8ff;
     letter-spacing: 1px;
-    transition: background 0.25s ease, 
+    transition: background 0.25s ease;
 }
 
 ul {
@@ -42,12 +42,8 @@ li a {
     color: white;
     font-size: 18px;
     font-weight: 500;
-    margin-right: 25px;
-    transition: color 0.3s ease;
-}
-
-li a:hover {
-    color: #00a8ff;
+    align-items: center;
+    cursor: pointer;
 }
 
 
@@ -112,11 +108,11 @@ li a:hover {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
-    transition: background 0.25s ease, 
+    transition: background 0.3s ease, transform 0.3s ease
 }
 
 .primary-btn:hover {
-    transform: translateY(-3xp);
+    transform: translateY(-3px);
     background: #006adb;
 }
 
@@ -127,9 +123,13 @@ ul {
 li {
     margin-bottom: 18px;
     background: #20262b;
-    padding: 15px 20px;
+    padding: 15px 25px;
     border-radius: 30px;
     border: 1px solid #2b3239;
+}
+
+li:hover {
+background: #007bff;
 }
 
 a {
