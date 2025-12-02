@@ -1,5 +1,5 @@
 .category-columns {
-    display: flex;
+    display: block;
     gap: 20px;
     justify-content: space-between;
 }
