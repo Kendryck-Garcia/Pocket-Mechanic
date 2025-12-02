@@ -38,7 +38,8 @@
 .delete-btn {
     color: red;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 15px;
+    background: #20262b;
 }
 
 .delete-btn:hover {
