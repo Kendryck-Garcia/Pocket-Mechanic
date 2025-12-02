@@ -1,27 +1,32 @@
-* {
+*
+{
     text-decoration: none;
     box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
 }
 
-body {
+body
+{
     background: white;
     margin: 0;
     color: white;
 }
 
-.navbar {
+.navbar
+{
     background-color: #0e0e10;
-    padding: 15px 15px;
+    padding: 6px 15px;
 }
 
-.navdiv {
+.navdiv
+{
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.logo a {
+.logo a
+{
     font-size: 32px;
     font-weight: 700;
     color: #00a8ff;
@@ -29,16 +34,19 @@ body {
     transition: background 0.25s ease;
 }
 
-ul {
+ul
+{
     margin: 0;
     padding: 0;
 }
 
-li {
+li
+{
     display: inline-block;
 }
 
-li a {
+li a
+{
     color: white;
     font-size: 18px;
     font-weight: 500;
@@ -47,18 +55,20 @@ li a {
 }
 
 
-.view {
+.view
+{
     width: 90%;
     max-width: 850px;
     margin: 40px auto;
     background: #0e0e10;
     padding: 30px;
     border-radius: 14px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.35);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
 }
 
 
-.panel {
+.panel
+{
     background: #0e0e10;
     padding: 22px;
     border-radius: 12px;
@@ -66,7 +76,8 @@ li a {
     border: 1px solid #0e0e10;
 }
 
-.panel h2 {
+.panel h2
+{
     margin-bottom: 14px;
     font-size: 22px;
     font-weight: 600;
@@ -74,7 +85,8 @@ li a {
 }
 
 
-.panel label {
+.panel label
+{
     display: block;
     margin-top: 12px;
     color: white;
@@ -82,7 +94,8 @@ li a {
 }
 
 .panel input,
-.panel select {
+.panel select
+{
     width: 100%;
     padding: 10px;
     border: none;
@@ -94,11 +107,13 @@ li a {
 }
 
 .panel input:focus,
-.panel select:focus {
+.panel select:focus
+{
     outline: 2px solid #007bff;
 }
 
-.primary-btn {
+.primary-btn
+{
     background: #007bff;
     color: white;
     border: none;
@@ -108,19 +123,38 @@ li a {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
-    transition: background 0.3s ease, transform 0.3s ease
+    transition: background 0.1s ease, transform 0.1s ease
 }
 
-.primary-btn:hover {
-    transform: translateY(-3px);
+.primary-btn:hover
+{
+    transform: scale(1.01);
     background: #006adb;
 }
 
-ul {
+ul
+{
     list-style: none;
 }
 
-li {
+li
+{
+    margin-bottom: 18px;
+    background: #20262b;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: 1px solid #2b3239;
+    transition: transform 0.1s ease
+}
+
+li:hover
+{
+    background: #283036;
+    transform: scale(1.01);
+}
+
+.nav-btn
+{
     margin-bottom: 18px;
     background: #20262b;
     padding: 15px 25px;
@@ -128,29 +162,34 @@ li {
     border: 1px solid #2b3239;
 }
 
-li:hover {
-background: #007bff;
+.nav-btn:hover
+{
+    background: #006adb;
 }
 
-a {
+a
+{
     color: red;
     word-break: break-all;
 }
 
-li strong {
+li strong
+{
     display: block;
     font-size: 17px;
     color: #e9e9e9;
     margin-bottom: 6px;
 }
 
-@media (max-width: 600px) {
-    .logo a {
+@media (max-width: 600px)
+{
+    .logo a
+    {
         font-size: 26px;
     }
-    li a {
+
+    li a
+    {
         font-size: 16px;
     }
 }
-
-

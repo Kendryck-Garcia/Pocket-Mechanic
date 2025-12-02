@@ -18,15 +18,15 @@
         <div class="navdiv">
             <div class="logo"><a href="{% url 'home' %}">Pocket Mechanic</a></div>
             <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'saved' %}">SavedItems</a></li>
+                <li class="nav-btn"><a href="{% url 'home' %}">Home</a></li>
+                <li class="nav-btn"><a href="{% url 'about' %}">About</a></li>
+                <li class="nav-btn"><a href="{% url 'contact' %}">Contact</a></li>
+                <li class="nav-btn"><a href="{% url 'saved' %}">Saved Items</a></li>
             </ul>
         </div>
     </nav>
-    
-     <script src="{% static 'saved.js' %}"></script>
+
+    <script src="{% static 'saved.js' %}"></script>
 
     {% block content %}{% endblock %}
 </body>
