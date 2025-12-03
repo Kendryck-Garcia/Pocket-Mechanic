@@ -10,57 +10,75 @@
 
         <div class="category-columns">
 
-            
+
             <div class="category-box">
                 <h2>Maintenance</h2>
                 {% for p in parts %}
-                    {% if p.category == "maintenance" %}
-                    <div class="part-card">
+                {% if p.category == "maintenance" %}
+                <div class="part-card">
+                    <div class="part-info">
                         <span class="badge maintenance">Maintenance</span>
-                        {{ p.part_name }} – {{ p.car }}
-
-                        <form method="post" action="{% url 'delete_part' p.id %}" style="display:inline;">
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
+                    </div>
+                    <div class="part-actions">
+                        {% if p.part_link %}
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
                             <button class="delete-btn">Delete</button>
                         </form>
                     </div>
-                    {% endif %}
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
 
-            
+
             <div class="category-box">
                 <h2>Accessories</h2>
                 {% for p in parts %}
-                    {% if p.category == "accessories" %}
-                    <div class="part-card">
+                {% if p.category == "accessories" %}
+                <div class="part-card">
+                    <div class="part-info">
                         <span class="badge accessories">Accessories</span>
-                        {{ p.part_name }} – {{ p.car }}
-
-                        <form method="post" action="{% url 'delete_part' p.id %}" style="display:inline;">
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
+                    </div>
+                    <div class="part-actions">
+                        {% if p.part_link %}
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
                             <button class="delete-btn">Delete</button>
                         </form>
                     </div>
-                    {% endif %}
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
 
-            
+
             <div class="category-box">
                 <h2>Modifications</h2>
                 {% for p in parts %}
-                    {% if p.category == "mods" %}
-                    <div class="part-card">
+                {% if p.category == "mods" %}
+                <div class="part-card">
+                    <div class="part-info">
                         <span class="badge mods">Mods</span>
-                        {{ p.part_name }} – {{ p.car }}
-
-                        <form method="post" action="{% url 'delete_part' p.id %}" style="display:inline;">
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
+                    </div>
+                    <div class="part-actions">
+                        {% if p.part_link %}
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
                             <button class="delete-btn">Delete</button>
                         </form>
                     </div>
-                    {% endif %}
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
 

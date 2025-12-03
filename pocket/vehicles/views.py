@@ -58,13 +58,21 @@ def home(request):
                 car_id=request.POST.get("car_id"),
                 part_name=request.POST.get("part_name"),
                 category=request.POST.get("category", "maintenance"),
+                part_link=request.POST.get("part_link"),
             )
             return redirect("home")
 
 
     if request.GET.get("ai_search"):
-        selected_car_id = request.GET.get("search_car_id")
+        raw_car_id = request.GET.get("search_car_id")
         query = request.GET.get("query", "").strip()
+
+        selected_car_id = None
+        if raw_car_id:
+            try:
+                selected_car_id = int(raw_car_id)
+            except ValueError:
+                selected_car_id = None
 
         if selected_car_id and query:
             try:

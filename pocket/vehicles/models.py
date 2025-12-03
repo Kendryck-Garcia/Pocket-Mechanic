@@ -25,6 +25,7 @@ class Part(models.Model):
         choices=CATEGORY_CHOICES,
         default="maintenance"
     )
+    part_link = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return f"{self.part_name} ({self.get_category_display()})"

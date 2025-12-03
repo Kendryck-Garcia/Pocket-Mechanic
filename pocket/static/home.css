@@ -54,6 +54,32 @@ li a
     cursor: pointer;
 }
 
+a:not(.part-link)
+{
+    color: rgb(0, 140, 255);
+    word-break: break-all;
+}
+
+li strong
+{
+    display: block;
+    font-size: 17px;
+    color: #e9e9e9;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 600px)
+{
+    .logo a
+    {
+        font-size: 26px;
+    }
+
+    li a
+    {
+        font-size: 16px;
+    }
+}
 
 .view
 {
@@ -167,18 +193,14 @@ li:hover
     background: #006adb;
 }
 
-a
+.nav-btn a
 {
-    color: red;
-    word-break: break-all;
+    color: white;
 }
 
-li strong
+.logo a
 {
-    display: block;
-    font-size: 17px;
-    color: #e9e9e9;
-    margin-bottom: 6px;
+    color: #00a8ff;
 }
 
 @media (max-width: 600px)

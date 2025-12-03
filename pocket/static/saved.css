@@ -32,6 +32,18 @@
     align-items: center;
 }
 
+.part-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.part-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .badge
 {
     font-size: 12px;
@@ -43,12 +55,12 @@
 .delete-btn
 {
     background: red;
-    color: whitesmoke;
+    color: black;
     border: none;
     padding: 12px;
     border-radius: 30px;
     cursor: pointer;
-    width: 100%;
+    width: auto;
     font-size: 16px;
     font-weight: bold;
     transition: background 0.1s ease, transform 0.1s ease
@@ -58,4 +70,44 @@
 {
     transform: scale(1.05);
     background: #a30000;
+}
+
+a.part-link
+{
+    display: inline-block;
+    background: cyan;
+    color: whitesmoke;
+    text-decoration: none;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    width: auto;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.part-card a.part-link,
+.part-link
+{
+    display: inline-block;
+    background: rgb(0, 194, 74);
+    color: black;
+    text-decoration: none;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    width: auto;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.part-card a.part-link:hover,
+.part-link:hover
+{
+    transform: scale(1.05);
+    background: #096d00;
 }
