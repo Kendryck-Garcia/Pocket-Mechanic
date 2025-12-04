@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{% static 'about.css' %}">
     <link rel="stylesheet" href="{% static 'contact.css' %}">
     <link rel="stylesheet" href="{% static 'saved.css' %}">
+    <link rel="stylesheet" href="{% static 'register.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+
+
 </head>
 
 <body>
@@ -22,6 +26,7 @@
                 <li class="nav-btn"><a href="{% url 'about' %}">About</a></li>
                 <li class="nav-btn"><a href="{% url 'contact' %}">Contact</a></li>
                 <li class="nav-btn"><a href="{% url 'saved' %}">Saved Items</a></li>
+                <li><a href="{% url 'user_logout' %}">Logout</a></li>
             </ul>
         </div>
     </nav>

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Car, Part
 import requests
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .forms import CreateUserForm, LoginForm
 
 SERPAPI_KEY = "09d2287ae9bbea48cfe3d2aa5f4488c47dc481e1448797758839625c0b465057"
 
@@ -34,12 +37,48 @@ def search_parts_with_serpapi(car, query):
     except Exception:
         return []
 
+def register(request):
+    form = CreateUserForm()
 
+    if request.method == "POST":
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("my-login")
+
+    context = {"registerForm": form}
+    return render(request, "register.html", context)
+
+
+def my_login(request):
+    form = LoginForm()
+
+    if request.method == "POST":
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect("home")
+
+    context = {"loginForm": form}
+    return render(request, "my-login.html", context)
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("my-login")
+
+@login_required(login_url="my-login")
 def home(request):
     cars = Car.objects.all()
     ai_results = []
     selected_car_id = None
     query = ""
+
 
     if request.method == "POST":
         form_type = request.POST.get("form_type")
@@ -94,16 +133,16 @@ def home(request):
 def about(request):
     return render(request, "about.html")
 
-
+@login_required(login_url="my-login")
 def contact(request):
     return render(request, "contact.html")
 
-
+@login_required(login_url="my-login")
 def saved(request):
     parts = Part.objects.select_related("car").all()
     return render(request, "saved.html", {"parts": parts})
 
-
+@login_required(login_url="my-login")
 def delete_part(request, part_id):
     part = get_object_or_404(Part, id=part_id)
     part.delete()
