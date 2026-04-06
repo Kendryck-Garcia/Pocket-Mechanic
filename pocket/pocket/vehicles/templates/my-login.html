@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="view">
+    <h1>Login</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ loginForm }}
+        <button type="submit" class="primary-btn">Login</button>
+    </form>
+
+    <p style="margin-top: 15px;">
+        Don't have an account?
+        <a href="{% url 'register' %}">Register here</a>
+    </p>
+</section>
+
+{% endblock %}
