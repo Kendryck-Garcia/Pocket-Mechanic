@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="view" style="max-width: 1000px;">
+<section class="view">
     <h1>Saved Parts</h1>
 
-    <div id="savedPartsSection" style="margin-top: 20px;">
+    <button id="toggleSavedBtn" class="primary-btn">Show Saved Parts</button>
+
+    <div id="savedPartsSection" style="display: none; margin-top: 20px;">
 
         <div class="category-columns">
 
@@ -16,10 +18,7 @@
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge maintenance">Maintenance</span>
-                        <div class="part-desc">
-                            <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
-                        </div>
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}
@@ -43,10 +42,7 @@
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge accessories">Accessories</span>
-                        <div class="part-desc">
-                            <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
-                        </div>
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}
@@ -70,10 +66,7 @@
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge mods">Mods</span>
-                        <div class="part-desc">
-                            <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
-                        </div>
+                        <span class="part-desc">{{ p.part_name }} – {{ p.car }}</span>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}

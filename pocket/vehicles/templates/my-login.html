@@ -6,9 +6,24 @@
 
     <form method="post" class="auth-form">
         {% csrf_token %}
-        {{ loginForm }}
 
-        <button type="submit" class="primary-btn">Login</button>
+        {% if loginForm.errors or loginForm.non_field_errors %}
+        <div class="errorlist">
+            {{ loginForm.non_field_errors }}
+            {% for field in loginForm %}
+                {% if field.errors %}
+                    <p><strong>{{ field.label }}:</strong> {{ field.errors.0 }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for field in loginForm %}
+            <label>{{ field.label }}</label>
+            {{ field }}
+        {% endfor %}
+
+        <button type="submit" class="primary-btn full">Login</button>
     </form>
 
     <p class="auth-switch">

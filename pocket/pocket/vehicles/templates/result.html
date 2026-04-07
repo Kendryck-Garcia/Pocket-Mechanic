@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if car %}
+    <h1>Results for {{ car.year }} {{ car.make }} {{ car.model }}</h1>
+
+    <ul class="results-list">
+        {% for p in parts %}
+        <li>
+            {{ p }}
+            <a class="secondary-btn" href="{% url 'save_part' car.id p %}">Save</a>
+        </li>
+        {% empty %}
+        <li>No parts found.</li>
+        {% endfor %}
+    </ul>
+
+    <a class="primary-btn" href="{% url 'saved' %}">View Saved Parts</a>
+{% else %}
+    <h1>No car selected</h1>
+    <p>Please go back to the home page and search for a car.</p>
+{% endif %}
+
+{% endblock %}
