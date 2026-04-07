@@ -7,13 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pocket Mechanic</title>
 
-    <link rel="stylesheet" href="{% static 'home.css' %}">
-    <link rel="stylesheet" href="{% static 'about.css' %}">
-    <link rel="stylesheet" href="{% static 'contact.css' %}">
-    <link rel="stylesheet" href="{% static 'saved.css' %}">
-    <link rel="stylesheet" href="{% static 'register.css' %}">
-    <link rel="stylesheet" href="{% static 'login.css' %}">
-
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 
 </head>
 
@@ -22,18 +16,36 @@
         <div class="navdiv">
             <div class="logo"><a href="{% url 'home' %}">Pocket Mechanic</a></div>
             <ul>
-                <li class="nav-btn"><a href="{% url 'home' %}">Home</a></li>
-                <li class="nav-btn"><a href="{% url 'about' %}">About</a></li>
-                <li class="nav-btn"><a href="{% url 'contact' %}">Contact</a></li>
-                <li class="nav-btn"><a href="{% url 'saved' %}">Saved Items</a></li>
-                <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'saved' %}">Saved Items</a></li>
+                <li><a href="{% url 'user_logout' %}" class="logout-link">Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <script src="{% static 'saved.js' %}"></script>
 
     {% block content %}{% endblock %}
+
+    <div id="saveOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Saving Part...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    const formType = form.querySelector('input[name="form_type"]');
+                    if (formType && formType.value === 'part') {
+                        document.getElementById('saveOverlay').classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

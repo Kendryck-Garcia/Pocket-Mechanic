@@ -2,7 +2,7 @@
 {% block content %}
 
 <section class="view">
-    <h1>Home</h1>
+    <h1>My Garage</h1>
 
     <div class="panel">
         <h2>Find, Save, and Organize Your Vehicle!</h2>
@@ -87,26 +87,28 @@
 
         {% if ai_results %}
         <h3>AI Results:</h3>
-        <ul>
+        <ul class="ai-results">
             {% for r in ai_results %}
             <li>
-                <strong>{{ r.title }}</strong><br>
-                <a href="{{ r.link }}" target="_blank">{{ r.link }}</a>
+                <div class="result-info">
+                    <strong>{{ r.title }}</strong>
+                    <a href="{{ r.link }}" target="_blank" style="display: block; margin-top: 5px; font-size: 13px; color: var(--primary); word-break: break-all;">{{ r.link }}</a>
+                </div>
 
-                <form method="post" style="display:inline-block; margin-top: 5px;">
+                <form method="post" class="form-inline">
                     {% csrf_token %}
                     <input type="hidden" name="form_type" value="part">
                     <input type="hidden" name="car_id" value="{{ selected_car_id }}">
                     <input type="hidden" name="part_name" value="{{ r.title }}">
                     <input type="hidden" name="part_link" value="{{ r.link }}">
 
-                    <select name="category" class="mini-select">
+                    <select name="category" class="mini-select" style="min-width: 150px; margin-top: 0;">
                         <option value="maintenance">Maintenance</option>
                         <option value="accessories">Accessories</option>
                         <option value="mods">Modifications</option>
                     </select>
 
-                    <button type="submit" class="primary-btn">Save</button>
+                    <button type="submit" class="primary-btn" style="margin-top: 0; padding: 10px 15px;">Save</button>
                 </form>
             </li>
 

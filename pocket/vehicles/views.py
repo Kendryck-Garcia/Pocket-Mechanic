@@ -1,12 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Car, Part
 import requests
+import os
+from pathlib import Path
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, LoginForm
 
-SERPAPI_KEY = "09d2287ae9bbea48cfe3d2aa5f4488c47dc481e1448797758839625c0b465057"
+# Securely load API key from .env
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+_local_key = None
+if env_path.exists():
+    with open(env_path, "r") as f:
+        for line in f:
+            if line.startswith("SERPAPI_KEY="):
+                _local_key = line.strip().split("=")[1]
+                break
+
+SERPAPI_KEY = os.environ.get("SERPAPI_KEY", _local_key)
 
 
 def search_parts_with_serpapi(car, query):
