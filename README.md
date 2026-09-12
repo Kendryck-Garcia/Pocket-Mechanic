@@ -2,7 +2,6 @@
 
 **Pocket Mechanic** is a web application designed to help everyday drivers and auto enthusiasts manage their vehicles. It provides a simple digital garage where you can easily keep track of your car's maintenance history, upcoming service schedules, and parts costs.
 
-🌐 **[Live Website](https://pocket-mechanic.onrender.com)** | 📖 [Documentation](#documentation)
 
 ### Built With:
 - **Backend**: Python, Django
@@ -52,6 +51,7 @@ SERPAPI_KEY=your-serpapi-key
 
 5. **Run migrations**
 ```bash
+cd pocket
 python manage.py migrate
 ```
 
@@ -60,21 +60,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Visit `http://localhost:8000` in your browser.
-
-## Deployment
-
-This project is configured for easy deployment on **Render** (free tier available).
-
-### Deploy to Render
-1. Push your code to GitHub
-2. Go to [render.com](https://render.com)
-3. Click "New +" → "Web Service"
-4. Connect your GitHub repository
-5. Render will automatically detect the `render.yaml` file
-6. Click "Deploy"
-
-Your app will be live at `https://pocket-mechanic.onrender.com`
+Visit `http://localhost:8000` or `http://127.0.0.1:8000` in your browser.
 
 ## Environment Variables
 
