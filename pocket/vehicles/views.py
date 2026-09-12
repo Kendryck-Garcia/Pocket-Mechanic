@@ -21,33 +21,74 @@ if env_path.exists():
 SERPAPI_KEY = os.environ.get("SERPAPI_KEY", _local_key)
 
 
+def get_serpapi_key():
+    key = os.environ.get("SERPAPI_KEY")
+    if not key and env_path.exists():
+        with open(env_path, "r") as f:
+            for line in f:
+                if line.strip().startswith("SERPAPI_KEY="):
+                    return line.strip().split("=", 1)[1].strip().strip('"').strip("'")
+    return key
+
+
 def search_parts_with_serpapi(car, query):
-    search_query = f"{car.year} {car.make} {car.model} {query} auto parts"
+    api_key = get_serpapi_key()
+    search_query = f"{car.year} {car.make} {car.model} {query}"
 
-    params = {
-        "api_key": SERPAPI_KEY,
-        "engine": "google",
-        "q": search_query,
-        "num": 5,
-    }
+    if api_key:
+        params = {
+            "api_key": api_key,
+            "engine": "google",
+            "q": search_query,
+            "num": 6,
+        }
 
-    try:
-        response = requests.get("https://serpapi.com/search.json", params=params, timeout=10)
-        if response.status_code != 200:
-            return []
+        try:
+            response = requests.get("https://serpapi.com/search.json", params=params, timeout=12)
+            if response.status_code == 200:
+                data = response.json()
+                results = []
 
-        data = response.json()
-        results = []
+                # Check organic results
+                for item in data.get("organic_results", [])[:6]:
+                    title = item.get("title")
+                    link = item.get("link")
+                    if title and link:
+                        results.append({"title": title, "link": link})
 
-        for item in data.get("organic_results", [])[:5]:
-            title = item.get("title")
-            link = item.get("link")
-            if title and link:
-                results.append({"title": title, "link": link})
+                # Check shopping / immersive results if organic was sparse
+                if len(results) < 3:
+                    for item in data.get("shopping_results", [])[:4]:
+                        title = item.get("title")
+                        link = item.get("link")
+                        if title and link and not any(r["link"] == link for r in results):
+                            results.append({"title": title, "link": link})
 
-        return results
-    except Exception:
-        return []
+                if results:
+                    return results[:6]
+        except Exception:
+            pass
+
+    # Reliable automotive parts fallback links if API call fails or limits are exceeded
+    encoded_q = requests.utils.quote(search_query)
+    return [
+        {
+            "title": f"AutoZone - {car.year} {car.make} {car.model} {query}",
+            "link": f"https://www.autozone.com/searchresult?searchText={encoded_q}",
+        },
+        {
+            "title": f"RockAuto Catalog - {car.year} {car.make} {car.model} {query}",
+            "link": f"https://www.rockauto.com/en/catalog/{car.make.lower()},{car.year},{car.model.lower()}",
+        },
+        {
+            "title": f"Amazon Automotive - {car.year} {car.make} {car.model} {query}",
+            "link": f"https://www.amazon.com/s?k={encoded_q}",
+        },
+        {
+            "title": f"Advance Auto Parts - {car.year} {car.make} {car.model} {query}",
+            "link": f"https://shop.advanceautoparts.com/c4/search?searchTerm={encoded_q}",
+        },
+    ]
 
 def register(request):
     form = CreateUserForm()
