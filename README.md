@@ -2,6 +2,8 @@
 
 **Pocket Mechanic** is a web application designed to help everyday drivers and auto enthusiasts manage their vehicles. It provides a simple digital garage where you can easily keep track of your car's maintenance history, upcoming service schedules, and parts costs.
 
+🌐 **Local App URL**: `http://127.0.0.1:8000` | 📂 **[GitHub Repository](https://github.com/Kendryck-Garcia/Pocket-Mechanic)**
+
 
 ### Built With:
 - **Backend**: Python, Django
