@@ -92,7 +92,7 @@
             <li>
                 <div class="result-info">
                     <strong>{{ r.title }}</strong>
-                    <a href="{{ r.link }}" target="_blank" style="display: block; margin-top: 5px; font-size: 13px; color: var(--primary); word-break: break-all;">{{ r.link }}</a>
+                    <a href="{{ r.link }}" target="_blank" style="display: block; margin-top: 4px; font-size: 13px; word-break: break-all;">{{ r.link }}</a>
                 </div>
 
                 <form method="post" class="form-inline">
@@ -102,13 +102,13 @@
                     <input type="hidden" name="part_name" value="{{ r.title }}">
                     <input type="hidden" name="part_link" value="{{ r.link }}">
 
-                    <select name="category" class="mini-select" style="min-width: 150px; margin-top: 0;">
+                    <select name="category" class="mini-select" style="min-width: 140px;">
                         <option value="maintenance">Maintenance</option>
                         <option value="accessories">Accessories</option>
                         <option value="mods">Modifications</option>
                     </select>
 
-                    <button type="submit" class="primary-btn" style="margin-top: 0; padding: 10px 15px;">Save</button>
+                    <button type="submit" class="primary-btn" style="margin-top: 0; padding: 8px 14px;">Save</button>
                 </form>
             </li>
 
