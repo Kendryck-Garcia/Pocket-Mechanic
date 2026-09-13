@@ -68,10 +68,10 @@ Visit `http://localhost:8000` or `http://127.0.0.1:8000` in your browser.
 
 | Variable | Description |
 |----------|-------------|
-| `DEBUG` | Set to `False` in production |
-| `SECRET_KEY` | Django secret key (auto-generated on Render) |
-| `ALLOWED_HOSTS` | Comma-separated list of allowed domains |
-| `SERPAPI_KEY` | Your SerpAPI key for live parts search |
+| `DEBUG` | Set to `True` for development, `False` for production |
+| `SECRET_KEY` | Unique Django security secret key |
+| `ALLOWED_HOSTS` | Comma-separated list of allowed hostnames/IPs |
+| `SERPAPI_KEY` | Your SerpAPI key for live parts search (optional fallback included) |
 
 ## License
 
