@@ -2,87 +2,105 @@
 {% block content %}
 
 <section class="view">
-    <h1>My Garage</h1>
+    <h1>Garage Terminal</h1>
 
     <div class="panel">
-        <h2>Find, Save, and Organize Your Vehicle!</h2>
+        <h2>Register Vehicle</h2>
         <form method="post">
             {% csrf_token %}
             <input type="hidden" name="form_type" value="car">
 
-            <label>Nickname:</label>
-            <input type="text" name="nickname">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                <div>
+                    <label>Nickname</label>
+                    <input type="text" name="nickname" placeholder="e.g. Daily Driver">
+                </div>
+                <div>
+                    <label>Year</label>
+                    <input type="number" name="year" placeholder="e.g. 2022" required>
+                </div>
+                <div>
+                    <label>Make</label>
+                    <input type="text" name="make" placeholder="e.g. Toyota" required>
+                </div>
+                <div>
+                    <label>Model</label>
+                    <input type="text" name="model" placeholder="e.g. Tacoma" required>
+                </div>
+            </div>
 
-            <label>Year:</label>
-            <input type="number" name="year">
-
-            <label>Make:</label>
-            <input type="text" name="make">
-
-            <label>Model:</label>
-            <input type="text" name="model">
-
-            <button type="submit" class="primary-btn full">Save Vehicle</button>
+            <button type="submit" class="primary-btn full">Save Vehicle to Garage</button>
         </form>
     </div>
 
     <hr>
 
     <div class="panel">
-        <h2>Add Part</h2>
+        <h2>Add Component / Part</h2>
         <form method="post">
             {% csrf_token %}
             <input type="hidden" name="form_type" value="part">
 
-            <label>Part Name:</label>
-            <input type="text" name="part_name">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <div>
+                    <label>Select Vehicle</label>
+                    <select name="car_id" required>
+                        {% for c in cars %}
+                        <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
+                            {{ c.year }} {{ c.make }} {{ c.model }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <label>Part Link:</label>
-            <input type="url" name="part_link">
+                <div>
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="maintenance">Maintenance</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="mods">Modifications</option>
+                    </select>
+                </div>
+            </div>
 
-            <label>Select Category</label>
-            <select name="category">
-                <option value="maintenance">Maintenance</option>
-                <option value="accessories">Accessories</option>
-                <option value="mods">Modifications</option>
-            </select>
+            <label>Part Name</label>
+            <input type="text" name="part_name" placeholder="e.g. Brembo Front Brake Rotors" required>
 
-            <label>Select Vehicle</label>
-            <select name="car_id">
-                {% for c in cars %}
-                <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                    {{ c.year }} {{ c.make }} {{ c.model }}
-                </option>
-                {% endfor %}
-            </select>
+            <label>Part URL / Purchase Link</label>
+            <input type="url" name="part_link" placeholder="https://...">
 
-            <button type="submit" class="primary-btn full">Save Part</button>
+            <button type="submit" class="primary-btn full">Save Part to Log</button>
         </form>
     </div>
 
     <hr>
 
     <div class="panel">
-        <h2>Search With AI</h2>
+        <h2>Live Automotive AI Search</h2>
 
         <form method="get">
             <input type="hidden" name="ai_search" value="1">
 
-            <label>Select Vehicle</label>
-            <select name="search_car_id" required>
-                <option value="">Select a vehicle</option>
-                {% for c in cars %}
-                <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                    {{ c.year }} {{ c.make }} {{ c.model }}
-                </option>
-                {% endfor %}
-            </select>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <div>
+                    <label>Select Target Vehicle</label>
+                    <select name="search_car_id" required>
+                        <option value="">Choose a vehicle...</option>
+                        {% for c in cars %}
+                        <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
+                            {{ c.year }} {{ c.make }} {{ c.model }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div>
+                    <label>Component / Keyword</label>
+                    <input type="text" name="query" placeholder="e.g. ceramic brake pads, alternator" value="{{ query }}" required>
+                </div>
+            </div>
 
-            <label>Search For Parts:</label>
-            <input type="text" name="query" placeholder="e.g. brake pads" value="{{ query }}">
-
-            <button type="submit" class="primary-btn full">Search with AI</button>
+            <button type="submit" class="primary-btn full">Query AI & Catalogues</button>
         </form>
 
         {% if ai_results %}
