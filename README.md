@@ -1,88 +1,84 @@
 # 🚗 Pocket Mechanic
 
-**Pocket Mechanic** is a web application designed to help everyday drivers and auto enthusiasts manage their vehicles. It provides a simple digital garage where you can easily keep track of your car's maintenance history, upcoming service schedules, and parts costs.
+**Pocket Mechanic** is a clean, lightweight digital garage web app built to help everyday drivers and car enthusiasts track maintenance history, upcoming service schedules, and repair costs.
 
-🌐 **Local App URL**: `http://127.0.0.1:8000` | 📂 **[GitHub Repository](https://github.com/Kendryck-Garcia/Pocket-Mechanic)**
+🌐 **Live Demo**: [kendryckgarcia.pythonanywhere.com](https://kendryckgarcia.pythonanywhere.com)
 
+---
 
-### Built With:
-- **Backend**: Python, Django
-- **Frontend**: HTML5, custom Vanilla CSS
-- **API**: SerpAPI (Google Search for live part fetching)
+## ✨ Features
 
-## Features
+- 🚙 **Vehicle Management** — Add and manage your personal fleet in a centralized garage.
+- 🔧 **Maintenance Tracking** — Log completed services, repair dates, and total costs.
+- 📊 **Service Reminders** — Stay ahead of routine oil changes, tire rotations, and scheduled maintenance.
+- 🔍 **Live Parts Search** — Real-time automotive parts and price search powered by SerpAPI.
 
-- 🚙 **Vehicle Management** - Add and manage multiple vehicles
-- 🔧 **Maintenance Tracking** - Log maintenance history and costs
-- 📊 **Service Reminders** - Track upcoming maintenance
-- 🔍 **Live Parts Search** - Search for automotive parts in real-time with SerpAPI
+---
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
-- Python 3.9+
-- pip
-- Django 4.2+
+- **Backend**: Python 3, Django 4.2
+- **Frontend**: HTML5, Vanilla CSS
+- **API**: SerpAPI (Google Search for automotive parts)
+- **Deployment**: PythonAnywhere, WhiteNoise, Gunicorn
 
-### Installation
+---
 
-1. **Clone the repository**
+## 🚀 Quickstart (Run Locally)
+
+### 1. Clone the repository
 ```bash
 git clone https://github.com/Kendryck-Garcia/Pocket-Mechanic.git
 cd Pocket-Mechanic
 ```
 
-2. **Create a virtual environment**
+### 2. Create and activate a virtual environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Windows:
+venv\Scripts\activate
+
+# macOS / Linux:
+source venv/bin/activate
 ```
 
-3. **Install dependencies**
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Set up environment variables**
+### 4. Configure environment variables
 Create a `.env` file in the root directory:
-```
+```env
 DEBUG=True
 SECRET_KEY=your-secret-key-here
-SERPAPI_KEY=your-serpapi-key
+SERPAPI_KEY=your-serpapi-key-optional
 ```
 
-5. **Run migrations**
+### 5. Run migrations & start server
 ```bash
 cd pocket
 python manage.py migrate
-```
-
-6. **Start the development server**
-```bash
 python manage.py runserver
 ```
 
-Visit `http://localhost:8000` or `http://127.0.0.1:8000` in your browser.
-
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `DEBUG` | Set to `True` for development, `False` for production |
-| `SECRET_KEY` | Unique Django security secret key |
-| `ALLOWED_HOSTS` | Comma-separated list of allowed hostnames/IPs |
-| `SERPAPI_KEY` | Your SerpAPI key for live parts search (optional fallback included) |
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support & Contributions
-
-Found a bug or have a feature request? Feel free to open an issue!
-
-Contributions are welcome! Please fork the repository and submit a pull request.
+Open `http://127.0.0.1:8000` in your browser.
 
 ---
 
-**Happy tracking! Keep your vehicles in top shape with Pocket Mechanic.** 🔧
+## ⚙️ Environment Variables
+
+| Variable | Description |
+|:---|:---|
+| `DEBUG` | Set to `True` for development, `False` for production |
+| `SECRET_KEY` | Django secret key for security |
+| `ALLOWED_HOSTS` | Comma-separated list of permitted hostnames |
+| `SERPAPI_KEY` | *(Optional)* SerpAPI key for live parts search |
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
