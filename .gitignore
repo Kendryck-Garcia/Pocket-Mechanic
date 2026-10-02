@@ -1,7 +1,30 @@
+# Environment & Secrets
 .env
+*.env
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
 *.pyc
+
+# Virtual Environments
+venv/
 .venv/
+env/
 new_env/
 myenv/
+**/new_env/
+**/myenv/
+**/venv/
+
+# Django Database & Static
 *.sqlite3
+db.sqlite3
+staticfiles/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
