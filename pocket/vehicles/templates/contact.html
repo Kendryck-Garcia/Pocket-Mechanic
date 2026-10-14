@@ -1,25 +1,33 @@
 {% extends "base.html" %}
+{% block page_title %}Contact{% endblock %}
+{% block meta_description %}Get in touch with the Pocket Mechanic team.{% endblock %}
+
 {% block content %}
 
-<section class="view">
-    <h1>Contact Us</h1>
+<section class="view" aria-labelledby="contact-heading">
+    <h1 id="contact-heading">Contact us</h1>
 
-    <form class="contact-form">
-        <label>First Name:</label>
-        <input type="text" name="first_name" class="input-field" required>
+    <div class="panel">
+        <form class="contact-form" novalidate>
+            <label for="first-name">First name</label>
+            <input type="text" id="first-name" name="first_name" required aria-required="true">
 
-        <label>Last Name:</label>
-        <input type="text" name="last_name" class="input-field" required>
+            <label for="last-name">Last name</label>
+            <input type="text" id="last-name" name="last_name" required aria-required="true">
 
-        <label>Email:</label>
-        <input type="email" name="email" class="input-field" required>
-        <br>
-        <label class="checkbox-label">
-            Join our updates<input type="checkbox" name="join"> 
-        </label>
+            <label for="contact-email">Email address</label>
+            <input type="email" id="contact-email" name="email" required aria-required="true">
 
-        <button type="submit" class="primary-btn full">Submit</button>
-    </form>
+            <label class="checkbox-label" for="join-updates">
+                <input type="checkbox" id="join-updates" name="join">
+                Send me occasional updates
+            </label>
+
+            <button type="submit" class="primary-btn full" id="contact-submit-btn">
+                Send message
+            </button>
+        </form>
+    </div>
 </section>
 
 {% endblock %}

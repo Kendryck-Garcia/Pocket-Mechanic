@@ -1,30 +1,33 @@
 {% extends "base.html" %}
+{% block page_title %}About{% endblock %}
+{% block meta_description %}Pocket Mechanic is a vehicle maintenance and parts cataloguing terminal for auto enthusiasts, mechanics, and everyday drivers.{% endblock %}
+
 {% block content %}
 
-<section class="view" style="max-width: 860px;">
-    <h1>About Pocket Mechanic</h1>
-    
-    <div class="panel" style="font-size: 15.5px; line-height: 1.75; color: var(--text-secondary); text-align: center; padding: 34px 28px;">
-        <p style="margin-bottom: 20px; font-size: 17px; color: var(--text-primary); font-weight: 500;">
-            Pocket Mechanic is a modern vehicle maintenance and components terminal engineered for auto enthusiasts, mechanics, and everyday drivers.
+<section class="view" aria-labelledby="about-heading">
+    <h1 id="about-heading">About Pocket Mechanic</h1>
+
+    <div class="panel panel--intro">
+        <p class="lead">
+            Pocket Mechanic is a vehicle maintenance and parts cataloguing terminal for auto enthusiasts, mechanics, and everyday drivers.
         </p>
-        <p style="margin-bottom: 0;">
-            Centralize your builds, catalog service records, track replacement parts, and source direct OEM and aftermarket components with live automotive search intelligence.
+        <p>
+            Centralise your builds, catalog service records, track replacement parts, and source OEM and aftermarket components using live automotive search.
         </p>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px;">
-        <div class="panel" style="margin-bottom: 0; padding: 22px;">
-            <h2 style="font-size: 15px; margin-bottom: 8px;">Vehicle Profiles</h2>
-            <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Organize specs, nicknames, and records for every car in your stable.</p>
+    <div class="feature-grid">
+        <div class="panel panel--feature">
+            <h2>Vehicle profiles</h2>
+            <p>Organise specs, nicknames, and records for every car in your garage.</p>
         </div>
-        <div class="panel" style="margin-bottom: 0; padding: 22px;">
-            <h2 style="font-size: 15px; margin-bottom: 8px;">Parts Catalog</h2>
-            <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Categorize maintenance, performance modifications, and accessories.</p>
+        <div class="panel panel--feature">
+            <h2>Parts catalog</h2>
+            <p>Categorise maintenance, performance modifications, and accessories in one place.</p>
         </div>
-        <div class="panel" style="margin-bottom: 0; padding: 22px;">
-            <h2 style="font-size: 15px; margin-bottom: 8px;">Live Intelligence</h2>
-            <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0;">Instantly fetch live part matches across top automotive suppliers.</p>
+        <div class="panel panel--feature">
+            <h2>Live parts search</h2>
+            <p>Fetch live part matches across top automotive suppliers instantly.</p>
         </div>
     </div>
 </section>

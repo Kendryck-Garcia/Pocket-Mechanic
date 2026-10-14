@@ -5,42 +5,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pocket Mechanic</title>
+    <title>{% block page_title %}Pocket Mechanic{% endblock %} — Garage terminal</title>
+    <meta name="description" content="{% block meta_description %}Pocket Mechanic — track vehicles, catalog parts, and search automotive suppliers from one place.{% endblock %}">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{% static 'main.css' %}">
-
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="navdiv">
-            <div class="logo"><a href="{% url 'home' %}">Pocket Mechanic</a></div>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'saved' %}">Saved Items</a></li>
-                <li><a href="{% url 'user_logout' %}" class="logout-link">Logout</a></li>
-            </ul>
+    <header>
+        <nav class="navbar" aria-label="Site navigation">
+            <div class="navdiv">
+                <div class="logo">
+                    <a href="{% url 'home' %}" aria-label="Pocket Mechanic — home">Pocket Mechanic</a>
+                </div>
+                <ul role="list">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'saved' %}">Saved items</a></li>
+                    <li><a href="{% url 'user_logout' %}" class="logout-link">Sign out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer" aria-label="Site footer">
+        <div class="footer-inner">
+            <span class="footer-brand">Pocket Mechanic</span>
+            <span class="footer-copy">Your garage, catalogued.</span>
         </div>
-    </nav>
+    </footer>
 
-
-    {% block content %}{% endblock %}
-
-    <div id="saveOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <p>Saving Part...</p>
+    <!-- Loading overlay — shown while part is being saved -->
+    <div id="saveOverlay" class="loading-overlay" role="status" aria-live="polite" aria-label="Saving part, please wait">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p>Saving part…</p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const forms = document.querySelectorAll('form');
+
             forms.forEach(form => {
-                form.addEventListener('submit', (e) => {
+                form.addEventListener('submit', () => {
                     const formType = form.querySelector('input[name="form_type"]');
+
+                    // Show overlay for part saves
                     if (formType && formType.value === 'part') {
                         document.getElementById('saveOverlay').classList.add('active');
+                    }
+
+                    // Disable & mark busy on the submit button to prevent double-submit
+                    const submitBtn = form.querySelector('[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.setAttribute('aria-busy', 'true');
+                        submitBtn.disabled = true;
                     }
                 });
             });

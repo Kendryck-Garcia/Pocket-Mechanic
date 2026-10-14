@@ -101,6 +101,19 @@ body {
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 
+/* Screen-reader only — visually hidden but accessible */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 /* Subtle SVG noise film grain — depth without gradients */
 body::after {
     content: '';
@@ -228,6 +241,11 @@ body::after {
     border-radius: var(--radius-card);
     padding: 40px 44px;
     box-shadow: var(--shadow-card);
+}
+
+/* Wide variant for pages like saved items that need more horizontal space */
+.view--wide {
+    max-width: 1080px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -439,8 +457,7 @@ h3 {
     font-size: var(--fs-xs);
     font-weight: 600;
     color: var(--text-muted);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
+    letter-spacing: 0.04em;
     margin-top: 24px;
     margin-bottom: 12px;
 }
@@ -507,10 +524,11 @@ ul.ai-results li:hover {
 }
 
 .mini-select {
-    padding: 7px 30px 7px 10px !important;
-    font-size: var(--fs-xs) !important;
-    border-radius: var(--radius-sm) !important;
-    font-family: 'Geist Mono', monospace !important;
+    padding: 7px 30px 7px 10px;
+    font-size: var(--fs-xs);
+    border-radius: var(--radius-sm);
+    font-family: 'Geist Mono', monospace;
+    min-width: 140px;
 }
 
 /* --------------------------------------------------------------------------
@@ -541,9 +559,8 @@ ul.ai-results li:hover {
     font-family: 'Geist Mono', monospace;
     font-size: var(--fs-xs);
     font-weight: 600;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.04em;
     color: var(--text-muted);
-    text-transform: uppercase;
     padding-bottom: 12px;
     margin-bottom: 12px;
     border-bottom: 1px solid var(--border-subtle);
@@ -826,6 +843,114 @@ ul.ai-results li:hover {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 14px;
     margin-top: 20px;
+}
+
+/* Intro panel variant — lead copy block */
+.panel--intro {
+    line-height: 1.75;
+    color: var(--text-secondary);
+    padding: 34px 32px;
+    margin-bottom: 24px;
+}
+
+.panel--intro p {
+    margin-bottom: 16px;
+}
+
+.panel--intro p:last-child {
+    margin-bottom: 0;
+}
+
+.panel--intro .lead {
+    font-size: var(--fs-md);
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+/* Feature card variant — no bottom margin, consistent padding */
+.panel--feature {
+    margin-bottom: 0;
+    padding: 22px 20px;
+}
+
+.panel--feature h2 {
+    font-size: var(--fs-base);
+    margin-bottom: 8px;
+}
+
+.panel--feature p {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.65;
+}
+
+/* Inline save form in AI results — override margin */
+.form-inline .primary-btn {
+    margin-top: 0;
+    padding: 8px 16px;
+    white-space: nowrap;
+}
+
+
+
+/* --------------------------------------------------------------------------
+   SITE FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border-subtle);
+    padding: 20px 24px;
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer-brand {
+    font-family: 'Geist Mono', monospace;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: -0.01em;
+}
+
+.footer-copy {
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   AUTH HELP TEXT (Django password validation hints)
+   -------------------------------------------------------------------------- */
+.helptext,
+.helptext ul li {
+    background: var(--bg-inset);
+    color: var(--text-secondary);
+    font-size: var(--fs-xs);
+    font-family: 'Geist Mono', monospace;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    margin: 6px 0;
+    list-style: none;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.helptext ul {
+    margin: 0;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 /* --------------------------------------------------------------------------

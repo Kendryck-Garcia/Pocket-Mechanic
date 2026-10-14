@@ -1,61 +1,99 @@
 {% extends "base.html" %}
+{% block page_title %}Garage terminal{% endblock %}
+{% block meta_description %}Register your vehicles, catalog parts by category, and search live automotive suppliers — all from your garage terminal.{% endblock %}
+
 {% block content %}
 
-<section class="view">
-    <h1>Garage Terminal</h1>
+<section class="view" aria-labelledby="garage-heading">
+    <h1 id="garage-heading">Garage terminal</h1>
 
-    <div class="panel">
-        <h2>Register Vehicle</h2>
-        <form method="post">
+    <!-- Register vehicle -->
+    <div class="panel" aria-labelledby="register-heading">
+        <h2 id="register-heading">Register vehicle</h2>
+        <form method="post" novalidate>
             {% csrf_token %}
             <input type="hidden" name="form_type" value="car">
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            <div class="field-grid">
                 <div>
-                    <label>Nickname</label>
-                    <input type="text" name="nickname" placeholder="e.g. Daily Driver">
+                    <label for="nickname">Nickname</label>
+                    <input
+                        type="text"
+                        id="nickname"
+                        name="nickname"
+                        placeholder="Daily driver"
+                        autocomplete="off">
                 </div>
                 <div>
-                    <label>Year</label>
-                    <input type="number" name="year" placeholder="e.g. 2022" required>
+                    <label for="year">Year</label>
+                    <input
+                        type="number"
+                        id="year"
+                        name="year"
+                        placeholder="2022"
+                        min="1900"
+                        max="2099"
+                        required
+                        aria-required="true">
                 </div>
                 <div>
-                    <label>Make</label>
-                    <input type="text" name="make" placeholder="e.g. Toyota" required>
+                    <label for="make">Make</label>
+                    <input
+                        type="text"
+                        id="make"
+                        name="make"
+                        placeholder="Toyota"
+                        required
+                        aria-required="true">
                 </div>
                 <div>
-                    <label>Model</label>
-                    <input type="text" name="model" placeholder="e.g. Tacoma" required>
+                    <label for="model">Model</label>
+                    <input
+                        type="text"
+                        id="model"
+                        name="model"
+                        placeholder="Tacoma"
+                        required
+                        aria-required="true">
                 </div>
             </div>
 
-            <button type="submit" class="primary-btn full">Save Vehicle to Garage</button>
+            <button type="submit" class="primary-btn full" id="save-vehicle-btn">
+                Save vehicle to garage
+            </button>
         </form>
     </div>
 
     <hr>
 
-    <div class="panel">
-        <h2>Add Component / Part</h2>
-        <form method="post">
+    <!-- Add component / part -->
+    <div class="panel" aria-labelledby="add-part-heading">
+        <h2 id="add-part-heading">Add component / part</h2>
+
+        {% if not cars %}
+        <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 16px;">
+            Register a vehicle above before adding parts.
+        </p>
+        {% else %}
+        <form method="post" novalidate>
             {% csrf_token %}
             <input type="hidden" name="form_type" value="part">
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div class="field-grid">
                 <div>
-                    <label>Select Vehicle</label>
-                    <select name="car_id" required>
+                    <label for="car-select">Vehicle</label>
+                    <select id="car-select" name="car_id" required aria-required="true">
                         {% for c in cars %}
                         <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                            {{ c.year }} {{ c.make }} {{ c.model }}
+                            {{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} — {{ c.nickname }}{% endif %}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div>
-                    <label>Category</label>
-                    <select name="category">
+                    <label for="part-category">Category</label>
+                    <select id="part-category" name="category">
                         <option value="maintenance">Maintenance</option>
                         <option value="accessories">Accessories</option>
                         <option value="mods">Modifications</option>
@@ -63,75 +101,107 @@
                 </div>
             </div>
 
-            <label>Part Name</label>
-            <input type="text" name="part_name" placeholder="e.g. Brembo Front Brake Rotors" required>
+            <label for="part-name">Part name</label>
+            <input
+                type="text"
+                id="part-name"
+                name="part_name"
+                placeholder="Brembo front brake rotors"
+                required
+                aria-required="true">
 
-            <label>Part URL / Purchase Link</label>
-            <input type="url" name="part_link" placeholder="https://...">
+            <label for="part-link">Purchase link <span style="font-weight: 400; color: var(--text-faint);">(optional)</span></label>
+            <input
+                type="url"
+                id="part-link"
+                name="part_link"
+                placeholder="https://...">
 
-            <button type="submit" class="primary-btn full">Save Part to Log</button>
+            <button type="submit" class="primary-btn full" id="save-part-btn">
+                Save part to log
+            </button>
         </form>
+        {% endif %}
     </div>
 
     <hr>
 
-    <div class="panel">
-        <h2>Live Automotive AI Search</h2>
+    <!-- AI parts search -->
+    <div class="panel" aria-labelledby="search-heading">
+        <h2 id="search-heading">Live parts search</h2>
 
-        <form method="get">
+        {% if not cars %}
+        <p style="color: var(--text-muted); font-size: var(--fs-sm);">
+            Register a vehicle above to use parts search.
+        </p>
+        {% else %}
+        <form method="get" novalidate>
             <input type="hidden" name="ai_search" value="1">
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div class="field-grid">
                 <div>
-                    <label>Select Target Vehicle</label>
-                    <select name="search_car_id" required>
-                        <option value="">Choose a vehicle...</option>
+                    <label for="search-vehicle">Vehicle</label>
+                    <select id="search-vehicle" name="search_car_id" required aria-required="true">
+                        <option value="">Choose a vehicle</option>
                         {% for c in cars %}
                         <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                            {{ c.year }} {{ c.make }} {{ c.model }}
+                            {{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} — {{ c.nickname }}{% endif %}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div>
-                    <label>Component / Keyword</label>
-                    <input type="text" name="query" placeholder="e.g. ceramic brake pads, alternator" value="{{ query }}" required>
+                    <label for="search-query">Component or keyword</label>
+                    <input
+                        type="text"
+                        id="search-query"
+                        name="query"
+                        placeholder="Ceramic brake pads, alternator…"
+                        value="{{ query }}"
+                        required
+                        aria-required="true">
                 </div>
             </div>
 
-            <button type="submit" class="primary-btn full">Query AI & Catalogues</button>
+            <button type="submit" class="primary-btn full" id="search-parts-btn">
+                Search parts
+            </button>
         </form>
 
         {% if ai_results %}
-        <h3>AI Results:</h3>
-        <ul class="ai-results">
+        <h3 id="results-label">Results</h3>
+        <ul class="ai-results" aria-labelledby="results-label">
             {% for r in ai_results %}
             <li>
                 <div class="result-info">
                     <strong>{{ r.title }}</strong>
-                    <a href="{{ r.link }}" target="_blank" style="display: block; margin-top: 4px; font-size: 13px; word-break: break-all;">{{ r.link }}</a>
+                    <a href="{{ r.link }}" target="_blank" rel="noopener noreferrer" aria-label="Open {{ r.title }} in new tab">{{ r.link }}</a>
                 </div>
 
-                <form method="post" class="form-inline">
+                <form method="post" class="form-inline" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="form_type" value="part">
                     <input type="hidden" name="car_id" value="{{ selected_car_id }}">
                     <input type="hidden" name="part_name" value="{{ r.title }}">
                     <input type="hidden" name="part_link" value="{{ r.link }}">
 
-                    <select name="category" class="mini-select" style="min-width: 140px;">
+                    <label for="result-category-{{ forloop.counter }}" class="sr-only">Category for {{ r.title }}</label>
+                    <select
+                        id="result-category-{{ forloop.counter }}"
+                        name="category"
+                        class="mini-select">
                         <option value="maintenance">Maintenance</option>
                         <option value="accessories">Accessories</option>
                         <option value="mods">Modifications</option>
                     </select>
 
-                    <button type="submit" class="primary-btn" style="margin-top: 0; padding: 8px 14px;">Save</button>
+                    <button type="submit" class="primary-btn">Save</button>
                 </form>
             </li>
-
             {% endfor %}
         </ul>
+        {% endif %}
         {% endif %}
     </div>
 </section>

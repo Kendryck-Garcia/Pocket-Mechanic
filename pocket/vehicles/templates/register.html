@@ -1,14 +1,17 @@
 {% extends "base.html" %}
+{% block page_title %}Create account{% endblock %}
+{% block meta_description %}Create a Pocket Mechanic account to start cataloguing your vehicles and parts.{% endblock %}
+
 {% block content %}
 
-<section class="view">
-    <h1>Register</h1>
+<section class="view" aria-labelledby="register-heading">
+    <h1 id="register-heading">Create account</h1>
 
-    <form method="post" class="auth-form">
+    <form method="post" class="auth-form" novalidate>
         {% csrf_token %}
-        
+
         {% if registerForm.errors or registerForm.non_field_errors %}
-        <div class="errorlist">
+        <div class="errorlist" role="alert" aria-live="assertive">
             {{ registerForm.non_field_errors }}
             {% for field in registerForm %}
                 {% if field.errors %}
@@ -19,16 +22,21 @@
         {% endif %}
 
         {% for field in registerForm %}
-            <label>{{ field.label }}</label>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            {% if field.help_text %}
+                <div class="helptext">{{ field.help_text }}</div>
+            {% endif %}
         {% endfor %}
 
-        <button type="submit" class="primary-btn full">Create Account</button>
+        <button type="submit" class="primary-btn full" id="register-submit-btn">
+            Create account
+        </button>
     </form>
 
     <p class="auth-switch">
         Already have an account?
-        <a href="{% url 'my-login' %}">Login here</a>
+        <a href="{% url 'my-login' %}">Sign in</a>
     </p>
 </section>
 

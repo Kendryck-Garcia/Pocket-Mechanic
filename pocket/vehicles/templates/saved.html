@@ -1,91 +1,104 @@
 {% extends "base.html" %}
+{% block page_title %}Component repository{% endblock %}
+{% block meta_description %}Browse and manage your saved parts and components across all registered vehicles.{% endblock %}
+
 {% block content %}
 
-<section class="view" style="max-width: 1080px;">
-    <h1>Component Repository</h1>
+<section class="view view--wide" aria-labelledby="repo-heading">
+    <h1 id="repo-heading">Component repository</h1>
 
-    <div id="savedPartsSection" style="margin-top: 24px;">
+    <div id="savedPartsSection">
         <div class="category-columns">
 
+            <!-- Maintenance -->
+            <div class="category-box" aria-labelledby="cat-maintenance">
+                <h2 id="cat-maintenance">Maintenance</h2>
 
-            <div class="category-box">
-                <h2>Maintenance</h2>
-                {% for p in parts %}
-                {% if p.category == "maintenance" %}
+                {% for p in parts %}{% if p.category == "maintenance" %}
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge maintenance">Maintenance</span>
                         <div class="part-desc">
                             <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
+                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}{% if p.car.nickname %} — {{ p.car.nickname }}{% endif %}</small>
                         </div>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}
-                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ p.part_name }} — opens in new tab">View part</a>
                         {% endif %}
                         <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
-                            <button class="delete-btn">Delete</button>
+                            <button class="delete-btn" type="submit" aria-label="Delete {{ p.part_name }}">Delete</button>
                         </form>
                     </div>
                 </div>
-                {% endif %}
+                {% endif %}{% empty %}
                 {% endfor %}
+
+                {% if maintenance_count == 0 %}
+                <div class="empty-state">No maintenance parts logged</div>
+                {% endif %}
             </div>
 
+            <!-- Accessories -->
+            <div class="category-box" aria-labelledby="cat-accessories">
+                <h2 id="cat-accessories">Accessories</h2>
 
-            <div class="category-box">
-                <h2>Accessories</h2>
-                {% for p in parts %}
-                {% if p.category == "accessories" %}
+                {% for p in parts %}{% if p.category == "accessories" %}
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge accessories">Accessories</span>
                         <div class="part-desc">
                             <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
+                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}{% if p.car.nickname %} — {{ p.car.nickname }}{% endif %}</small>
                         </div>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}
-                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ p.part_name }} — opens in new tab">View part</a>
                         {% endif %}
                         <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
-                            <button class="delete-btn">Delete</button>
+                            <button class="delete-btn" type="submit" aria-label="Delete {{ p.part_name }}">Delete</button>
                         </form>
                     </div>
                 </div>
+                {% endif %}{% endfor %}
+
+                {% if accessories_count == 0 %}
+                <div class="empty-state">No accessories logged</div>
                 {% endif %}
-                {% endfor %}
             </div>
 
+            <!-- Modifications -->
+            <div class="category-box" aria-labelledby="cat-mods">
+                <h2 id="cat-mods">Modifications</h2>
 
-            <div class="category-box">
-                <h2>Modifications</h2>
-                {% for p in parts %}
-                {% if p.category == "mods" %}
+                {% for p in parts %}{% if p.category == "mods" %}
                 <div class="part-card">
                     <div class="part-info">
                         <span class="badge mods">Mods</span>
                         <div class="part-desc">
                             <strong>{{ p.part_name }}</strong>
-                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}</small>
+                            <small>{{ p.car.year }} {{ p.car.make }} {{ p.car.model }}{% if p.car.nickname %} — {{ p.car.nickname }}{% endif %}</small>
                         </div>
                     </div>
                     <div class="part-actions">
                         {% if p.part_link %}
-                        <a class="part-link" href="{{ p.part_link }}" target="_blank">View part</a>
+                        <a class="part-link" href="{{ p.part_link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ p.part_name }} — opens in new tab">View part</a>
                         {% endif %}
                         <form method="post" action="{% url 'delete_part' p.id %}">
                             {% csrf_token %}
-                            <button class="delete-btn">Delete</button>
+                            <button class="delete-btn" type="submit" aria-label="Delete {{ p.part_name }}">Delete</button>
                         </form>
                     </div>
                 </div>
+                {% endif %}{% endfor %}
+
+                {% if mods_count == 0 %}
+                <div class="empty-state">No modifications logged</div>
                 {% endif %}
-                {% endfor %}
             </div>
 
         </div>

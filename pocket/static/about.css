@@ -1,23 +1,5 @@
-body {
-    margin: 0px;
-}
-
-.box {
-  background-color: black;
-  border: 2px solid white;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 700px;
-  margin: 20px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  color: white;
-  font-size: x-large;
-  margin-top: 0px;
-}
-
-input {
-    border-radius: 8px;
-    padding: 3px 10px;
-    border-color: #007bff;
-}
-
+/*
+ * DEPRECATED — This file is no longer loaded by any template.
+ * All styles for Pocket Mechanic live in main.css.
+ * This file is kept as a tombstone to prevent accidental re-introduction.
+ */

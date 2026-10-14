@@ -192,8 +192,14 @@ def contact(request):
 
 @login_required(login_url="my-login")
 def saved(request):
-    parts = Part.objects.select_related("car").all()
-    return render(request, "saved.html", {"parts": parts})
+    parts = Part.objects.select_related("car").filter(car__in=Car.objects.all())
+    context = {
+        "parts": parts,
+        "maintenance_count": parts.filter(category="maintenance").count(),
+        "accessories_count": parts.filter(category="accessories").count(),
+        "mods_count": parts.filter(category="mods").count(),
+    }
+    return render(request, "saved.html", context)
 
 @login_required(login_url="my-login")
 def delete_part(request, part_id):
