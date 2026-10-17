@@ -1,35 +1,32 @@
 {% extends "base.html" %}
 {% block page_title %}About{% endblock %}
-{% block meta_description %}Pocket Mechanic is a vehicle maintenance and parts cataloguing terminal for auto enthusiasts, mechanics, and everyday drivers.{% endblock %}
+{% block meta_description %}Pocket Mechanic keeps a list of your vehicles and the parts you buy or plan to buy for each one.{% endblock %}
 
 {% block content %}
 
-<section class="view" aria-labelledby="about-heading">
-    <h1 id="about-heading">About Pocket Mechanic</h1>
-
-    <div class="panel panel--intro">
-        <p class="lead">
-            Pocket Mechanic is a vehicle maintenance and parts cataloguing terminal for auto enthusiasts, mechanics, and everyday drivers.
-        </p>
-        <p>
-            Centralise your builds, catalog service records, track replacement parts, and source OEM and aftermarket components using live automotive search.
-        </p>
+<div class="about">
+    <div class="about__intro">
+        <div class="page-head">
+            <h1>About Pocket Mechanic</h1>
+        </div>
+        <p class="lede">A place to keep track of your vehicles and the parts you buy or plan to buy for each one.</p>
+        <p>It started as a fix for receipts, bookmarks and notes spread across too many apps. Register a vehicle once, then every part you log or find is filed under it.</p>
     </div>
 
-    <div class="feature-grid">
-        <div class="panel panel--feature">
-            <h2>Vehicle profiles</h2>
-            <p>Organise specs, nicknames, and records for every car in your garage.</p>
-        </div>
-        <div class="panel panel--feature">
-            <h2>Parts catalog</h2>
-            <p>Categorise maintenance, performance modifications, and accessories in one place.</p>
-        </div>
-        <div class="panel panel--feature">
-            <h2>Live parts search</h2>
-            <p>Fetch live part matches across top automotive suppliers instantly.</p>
-        </div>
-    </div>
-</section>
+    <ol class="feature-list">
+        <li>
+            <h2>Vehicle records</h2>
+            <p>Year, make, model and an optional nickname for each vehicle, with a running count of logged parts.</p>
+        </li>
+        <li>
+            <h2>Parts by category</h2>
+            <p>Each part is filed as maintenance, an accessory or a modification, with an optional link to where you bought it.</p>
+        </li>
+        <li>
+            <h2>Parts search</h2>
+            <p>Searches Google for parts matching your exact year, make and model. When the search service is unavailable, it links straight to AutoZone, RockAuto, Amazon and Advance Auto Parts.</p>
+        </li>
+    </ol>
+</div>
 
 {% endblock %}

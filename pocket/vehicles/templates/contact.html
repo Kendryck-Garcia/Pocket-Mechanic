@@ -1,33 +1,24 @@
 {% extends "base.html" %}
 {% block page_title %}Contact{% endblock %}
-{% block meta_description %}Get in touch with the Pocket Mechanic team.{% endblock %}
+{% block meta_description %}Report a bug or request a feature for Pocket Mechanic on GitHub.{% endblock %}
 
 {% block content %}
 
-<section class="view" aria-labelledby="contact-heading">
-    <h1 id="contact-heading">Contact us</h1>
-
-    <div class="panel">
-        <form class="contact-form" novalidate>
-            <label for="first-name">First name</label>
-            <input type="text" id="first-name" name="first_name" required aria-required="true">
-
-            <label for="last-name">Last name</label>
-            <input type="text" id="last-name" name="last_name" required aria-required="true">
-
-            <label for="contact-email">Email address</label>
-            <input type="email" id="contact-email" name="email" required aria-required="true">
-
-            <label class="checkbox-label" for="join-updates">
-                <input type="checkbox" id="join-updates" name="join">
-                Send me occasional updates
-            </label>
-
-            <button type="submit" class="primary-btn full" id="contact-submit-btn">
-                Send message
-            </button>
-        </form>
+<div class="auth">
+    <div class="page-head">
+        <h1>Contact</h1>
+        <p>Pocket Mechanic is a one-person project. Bug reports and feature requests go through GitHub issues, where you can follow the reply.</p>
     </div>
-</section>
+
+    <section class="tile" aria-labelledby="issue-heading">
+        <div class="tile__head">
+            <h2 id="issue-heading">Open an issue</h2>
+        </div>
+        <p class="tile__note">Include what you clicked, what you expected, and what happened instead. A screenshot helps.</p>
+        <div class="form-actions">
+            <a class="btn btn--primary btn--block" href="https://github.com/Kendryck-Garcia/Pocket-Mechanic/issues/new" target="_blank" rel="noopener noreferrer">Report a problem on GitHub<span class="sr-only"> (new tab)</span></a>
+        </div>
+    </section>
+</div>
 
 {% endblock %}

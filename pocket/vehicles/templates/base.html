@@ -5,69 +5,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block page_title %}Pocket Mechanic{% endblock %} — Garage terminal</title>
-    <meta name="description" content="{% block meta_description %}Pocket Mechanic — track vehicles, catalog parts, and search automotive suppliers from one place.{% endblock %}">
+    <title>{% block page_title %}Garage{% endblock %} · Pocket Mechanic</title>
+    <meta name="description" content="{% block meta_description %}Track your vehicles, log parts by category, and search parts suppliers for your exact year, make and model.{% endblock %}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 
 <body>
-    <header>
-        <nav class="navbar" aria-label="Site navigation">
-            <div class="navdiv">
-                <div class="logo">
-                    <a href="{% url 'home' %}" aria-label="Pocket Mechanic — home">Pocket Mechanic</a>
-                </div>
-                <ul role="list">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                    <li><a href="{% url 'saved' %}">Saved items</a></li>
-                    <li><a href="{% url 'user_logout' %}" class="logout-link">Sign out</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+    <a class="skip-link" href="#content">Skip to content</a>
 
-    <main>
-        {% block content %}{% endblock %}
+    {% with current=request.resolver_match.url_name %}
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% url 'home' %}">Pocket Mechanic</a>
+            <nav aria-label="Main">
+                <ul class="nav-list" role="list">
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'home' %}"{% if current == 'home' %} aria-current="page"{% endif %}>Garage</a></li>
+                    <li><a href="{% url 'saved' %}"{% if current == 'saved' %} aria-current="page"{% endif %}>Saved parts</a></li>
+                    <li><a href="{% url 'about' %}"{% if current == 'about' %} aria-current="page"{% endif %}>About</a></li>
+                    <li><a href="{% url 'contact' %}"{% if current == 'contact' %} aria-current="page"{% endif %}>Contact</a></li>
+                    <li><a href="{% url 'user_logout' %}">Sign out</a></li>
+                    {% else %}
+                    <li><a href="{% url 'about' %}"{% if current == 'about' %} aria-current="page"{% endif %}>About</a></li>
+                    <li><a href="{% url 'my-login' %}"{% if current == 'my-login' %} aria-current="page"{% endif %}>Sign in</a></li>
+                    <li><a href="{% url 'register' %}"{% if current == 'register' %} aria-current="page"{% endif %}>Create account</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    {% endwith %}
+
+    <main id="content" tabindex="-1">
+        <div class="page">
+            {% if messages %}
+            <ul class="flash-list" role="status">
+                {% for message in messages %}
+                <li class="flash{% if message.tags == 'error' %} flash--error{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
-    <footer class="site-footer" aria-label="Site footer">
-        <div class="footer-inner">
-            <span class="footer-brand">Pocket Mechanic</span>
-            <span class="footer-copy">Your garage, catalogued.</span>
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <span class="mono">Pocket Mechanic</span>
+            <a href="https://github.com/Kendryck-Garcia/Pocket-Mechanic">Source on GitHub</a>
         </div>
     </footer>
 
-    <!-- Loading overlay — shown while part is being saved -->
-    <div id="saveOverlay" class="loading-overlay" role="status" aria-live="polite" aria-label="Saving part, please wait">
-        <div class="loading-spinner" aria-hidden="true"></div>
-        <p>Saving part…</p>
-    </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const forms = document.querySelectorAll('form');
+        // Loading state: disable the submit button and swap in its loading label.
+        document.addEventListener('submit', (event) => {
+            const button = event.target.querySelector('button[type="submit"]');
+            if (!button) return;
+            button.dataset.label = button.textContent.trim();
+            if (button.dataset.loading) button.textContent = button.dataset.loading;
+            button.setAttribute('aria-busy', 'true');
+            button.disabled = true;
+        });
 
-            forms.forEach(form => {
-                form.addEventListener('submit', () => {
-                    const formType = form.querySelector('input[name="form_type"]');
-
-                    // Show overlay for part saves
-                    if (formType && formType.value === 'part') {
-                        document.getElementById('saveOverlay').classList.add('active');
-                    }
-
-                    // Disable & mark busy on the submit button to prevent double-submit
-                    const submitBtn = form.querySelector('[type="submit"]');
-                    if (submitBtn) {
-                        submitBtn.setAttribute('aria-busy', 'true');
-                        submitBtn.disabled = true;
-                    }
-                });
+        // Restore buttons when the page comes back from the back/forward cache.
+        window.addEventListener('pageshow', () => {
+            document.querySelectorAll('button[aria-busy="true"]').forEach((button) => {
+                button.textContent = button.dataset.label;
+                button.removeAttribute('aria-busy');
+                button.disabled = false;
             });
         });
     </script>

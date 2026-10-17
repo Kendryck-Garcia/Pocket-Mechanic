@@ -1,209 +1,247 @@
 {% extends "base.html" %}
-{% block page_title %}Garage terminal{% endblock %}
-{% block meta_description %}Register your vehicles, catalog parts by category, and search live automotive suppliers — all from your garage terminal.{% endblock %}
+{% block page_title %}Garage{% endblock %}
+{% block meta_description %}Your registered vehicles, the parts logged against each one, and a parts search scoped to the exact year, make and model.{% endblock %}
 
 {% block content %}
 
-<section class="view" aria-labelledby="garage-heading">
-    <h1 id="garage-heading">Garage terminal</h1>
+<div class="page-head">
+    <h1>Garage</h1>
+    <p>Every vehicle you have registered and how many parts are logged against it.</p>
+</div>
 
-    <!-- Register vehicle -->
-    <div class="panel" aria-labelledby="register-heading">
-        <h2 id="register-heading">Register vehicle</h2>
-        <form method="post" novalidate>
-            {% csrf_token %}
-            <input type="hidden" name="form_type" value="car">
+<div class="bento">
 
-            <div class="field-grid">
-                <div>
-                    <label for="nickname">Nickname</label>
-                    <input
-                        type="text"
-                        id="nickname"
-                        name="nickname"
-                        placeholder="Daily driver"
-                        autocomplete="off">
-                </div>
-                <div>
-                    <label for="year">Year</label>
-                    <input
-                        type="number"
-                        id="year"
-                        name="year"
-                        placeholder="2022"
-                        min="1900"
-                        max="2099"
-                        required
-                        aria-required="true">
-                </div>
-                <div>
-                    <label for="make">Make</label>
-                    <input
-                        type="text"
-                        id="make"
-                        name="make"
-                        placeholder="Toyota"
-                        required
-                        aria-required="true">
-                </div>
-                <div>
-                    <label for="model">Model</label>
-                    <input
-                        type="text"
-                        id="model"
-                        name="model"
-                        placeholder="Tacoma"
-                        required
-                        aria-required="true">
-                </div>
+    <!-- Garage status: primary tile -->
+    <section class="tile tile--primary bento__garage" aria-labelledby="garage-heading">
+        <div class="tile__head">
+            <h2 id="garage-heading">Vehicles</h2>
+        </div>
+
+        {% if cars %}
+        <dl class="stat-row">
+            <div class="stat">
+                <dt>Vehicles</dt>
+                <dd>{{ cars|length }}</dd>
             </div>
-
-            <button type="submit" class="primary-btn full" id="save-vehicle-btn">
-                Save vehicle to garage
-            </button>
-        </form>
-    </div>
-
-    <hr>
-
-    <!-- Add component / part -->
-    <div class="panel" aria-labelledby="add-part-heading">
-        <h2 id="add-part-heading">Add component / part</h2>
-
-        {% if not cars %}
-        <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 16px;">
-            Register a vehicle above before adding parts.
-        </p>
-        {% else %}
-        <form method="post" novalidate>
-            {% csrf_token %}
-            <input type="hidden" name="form_type" value="part">
-
-            <div class="field-grid">
-                <div>
-                    <label for="car-select">Vehicle</label>
-                    <select id="car-select" name="car_id" required aria-required="true">
-                        {% for c in cars %}
-                        <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                            {{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} — {{ c.nickname }}{% endif %}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label for="part-category">Category</label>
-                    <select id="part-category" name="category">
-                        <option value="maintenance">Maintenance</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="mods">Modifications</option>
-                    </select>
-                </div>
+            <div class="stat">
+                <dt>Parts logged</dt>
+                <dd>{{ total_parts }}</dd>
             </div>
+        </dl>
 
-            <label for="part-name">Part name</label>
-            <input
-                type="text"
-                id="part-name"
-                name="part_name"
-                placeholder="Brembo front brake rotors"
-                required
-                aria-required="true">
-
-            <label for="part-link">Purchase link <span style="font-weight: 400; color: var(--text-faint);">(optional)</span></label>
-            <input
-                type="url"
-                id="part-link"
-                name="part_link"
-                placeholder="https://...">
-
-            <button type="submit" class="primary-btn full" id="save-part-btn">
-                Save part to log
-            </button>
-        </form>
-        {% endif %}
-    </div>
-
-    <hr>
-
-    <!-- AI parts search -->
-    <div class="panel" aria-labelledby="search-heading">
-        <h2 id="search-heading">Live parts search</h2>
-
-        {% if not cars %}
-        <p style="color: var(--text-muted); font-size: var(--fs-sm);">
-            Register a vehicle above to use parts search.
-        </p>
-        {% else %}
-        <form method="get" novalidate>
-            <input type="hidden" name="ai_search" value="1">
-
-            <div class="field-grid">
-                <div>
-                    <label for="search-vehicle">Vehicle</label>
-                    <select id="search-vehicle" name="search_car_id" required aria-required="true">
-                        <option value="">Choose a vehicle</option>
-                        {% for c in cars %}
-                        <option value="{{ c.id }}" {% if selected_car_id == c.id %} selected {% endif %}>
-                            {{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} — {{ c.nickname }}{% endif %}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label for="search-query">Component or keyword</label>
-                    <input
-                        type="text"
-                        id="search-query"
-                        name="query"
-                        placeholder="Ceramic brake pads, alternator…"
-                        value="{{ query }}"
-                        required
-                        aria-required="true">
-                </div>
-            </div>
-
-            <button type="submit" class="primary-btn full" id="search-parts-btn">
-                Search parts
-            </button>
-        </form>
-
-        {% if ai_results %}
-        <h3 id="results-label">Results</h3>
-        <ul class="ai-results" aria-labelledby="results-label">
-            {% for r in ai_results %}
+        <ul class="garage-list" role="list">
+            {% for c in cars %}
             <li>
-                <div class="result-info">
-                    <strong>{{ r.title }}</strong>
-                    <a href="{{ r.link }}" target="_blank" rel="noopener noreferrer" aria-label="Open {{ r.title }} in new tab">{{ r.link }}</a>
-                </div>
-
-                <form method="post" class="form-inline" novalidate>
-                    {% csrf_token %}
-                    <input type="hidden" name="form_type" value="part">
-                    <input type="hidden" name="car_id" value="{{ selected_car_id }}">
-                    <input type="hidden" name="part_name" value="{{ r.title }}">
-                    <input type="hidden" name="part_link" value="{{ r.link }}">
-
-                    <label for="result-category-{{ forloop.counter }}" class="sr-only">Category for {{ r.title }}</label>
-                    <select
-                        id="result-category-{{ forloop.counter }}"
-                        name="category"
-                        class="mini-select">
-                        <option value="maintenance">Maintenance</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="mods">Modifications</option>
-                    </select>
-
-                    <button type="submit" class="primary-btn">Save</button>
-                </form>
+                <span class="year">{{ c.year }}</span>
+                <span>
+                    <span class="name">{{ c.make }} {{ c.model }}</span>
+                    {% if c.nickname %}<span class="nickname">{{ c.nickname }}</span>{% endif %}
+                </span>
+                <span class="count">{{ c.part_count }} part{{ c.part_count|pluralize }}</span>
             </li>
             {% endfor %}
         </ul>
+
+        <div class="tile__foot">
+            <a class="btn btn--ghost btn--small" href="{% url 'saved' %}">Open saved parts</a>
+        </div>
+        {% else %}
+        <div class="empty">
+            <strong>No vehicles yet</strong>
+            Add your first one with the form beside this panel. Parts and searches are tied to a vehicle, so they unlock once one is registered.
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Register vehicle: secondary tile -->
+    <section class="tile bento__register" aria-labelledby="register-heading">
+        <div class="tile__head">
+            <h2 id="register-heading">Register a vehicle</h2>
+        </div>
+
+        <form class="form" method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="car">
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" min="1900" max="2099" inputmode="numeric"
+                           value="{{ car_values.year|default:'' }}" required
+                           {% if car_errors.year %}aria-invalid="true" aria-describedby="year-error"{% endif %}>
+                    {% if car_errors.year %}<p class="field-error" id="year-error">{{ car_errors.year }}</p>{% endif %}
+                </div>
+                <div class="field">
+                    <label for="make">Make</label>
+                    <input type="text" id="make" name="make" autocomplete="off"
+                           value="{{ car_values.make|default:'' }}" required
+                           {% if car_errors.make %}aria-invalid="true" aria-describedby="make-error"{% endif %}>
+                    {% if car_errors.make %}<p class="field-error" id="make-error">{{ car_errors.make }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" autocomplete="off"
+                       value="{{ car_values.model|default:'' }}" required
+                       {% if car_errors.model %}aria-invalid="true" aria-describedby="model-error"{% endif %}>
+                {% if car_errors.model %}<p class="field-error" id="model-error">{{ car_errors.model }}</p>{% endif %}
+            </div>
+
+            <div class="field">
+                <label for="nickname">Nickname <span class="label-optional">optional</span></label>
+                <input type="text" id="nickname" name="nickname" autocomplete="off" aria-describedby="nickname-hint"
+                       value="{{ car_values.nickname|default:'' }}">
+                <p class="hint" id="nickname-hint">Shown under the model name in your garage.</p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--block" data-loading="Saving vehicle">Save vehicle to garage</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Parts search -->
+    <section class="tile bento__search" aria-labelledby="search-heading">
+        <div class="tile__head">
+            <h2 id="search-heading">Find parts</h2>
+        </div>
+
+        {% if not cars %}
+        <div class="empty">
+            <strong>Search needs a vehicle</strong>
+            Results are filtered to one year, make and model, so register a vehicle first.
+        </div>
+        {% else %}
+        <p class="tile__note">Searches Google for your exact vehicle. If that service is unavailable you get direct links to AutoZone, RockAuto, Amazon and Advance Auto Parts instead.</p>
+
+        <form class="form" method="get" role="search" novalidate>
+            <input type="hidden" name="ai_search" value="1">
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="search-vehicle">Vehicle</label>
+                    <select id="search-vehicle" name="search_car_id" required>
+                        {% for c in cars %}
+                        <option value="{{ c.id }}"{% if selected_car_id == c.id %} selected{% endif %}>{{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} ({{ c.nickname }}){% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="search-query">Part or symptom</label>
+                    <input type="text" id="search-query" name="query" value="{{ query }}" required aria-describedby="search-hint">
+                    <p class="hint" id="search-hint">A part name works best, like front brake pads.</p>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary" data-loading="Searching">Search parts</button>
+            </div>
+        </form>
+
+        {% if searched %}
+        <div class="results" aria-live="polite">
+            {% if ai_results %}
+            <p class="results__label" id="results-label">{{ ai_results|length }} result{{ ai_results|pluralize }} for “{{ query }}”</p>
+            <ul class="row-list" aria-labelledby="results-label">
+                {% for r in ai_results %}
+                <li>
+                    <div class="row-main">
+                        <strong>{{ r.title }}</strong>
+                        <a class="row-meta" href="{{ r.link }}" target="_blank" rel="noopener noreferrer">{{ r.link }}<span class="sr-only"> (opens in a new tab)</span></a>
+                    </div>
+
+                    <form class="row-actions" method="post" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="part">
+                        <input type="hidden" name="car_id" value="{{ selected_car_id }}">
+                        <input type="hidden" name="part_name" value="{{ r.title }}">
+                        <input type="hidden" name="part_link" value="{{ r.link }}">
+
+                        <label for="result-category-{{ forloop.counter }}" class="sr-only">Category for {{ r.title }}</label>
+                        <select id="result-category-{{ forloop.counter }}" name="category">
+                            {% for key, label in categories %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn--ghost btn--small" data-loading="Saving">Save part</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty">
+                <strong>Nothing found for “{{ query }}”</strong>
+                Try a shorter part name, or drop brand names from the search.
+            </div>
+            {% endif %}
+        </div>
         {% endif %}
         {% endif %}
-    </div>
-</section>
+    </section>
+
+    <!-- Log a part: secondary tile -->
+    <section class="tile bento__part" aria-labelledby="add-part-heading">
+        <div class="tile__head">
+            <h2 id="add-part-heading">Log a part</h2>
+        </div>
+
+        {% if not cars %}
+        <div class="empty">
+            <strong>Nothing to log against yet</strong>
+            Every part belongs to a vehicle. Register one first.
+        </div>
+        {% else %}
+        <form class="form" method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="part">
+
+            {% if part_errors.car_id or part_errors.category %}
+            <p class="field-error" role="alert">{{ part_errors.car_id|default:part_errors.category }}</p>
+            {% endif %}
+
+            <div class="field">
+                <label for="car-select">Vehicle</label>
+                <select id="car-select" name="car_id" required>
+                    {% for c in cars %}
+                    <option value="{{ c.id }}"{% if part_values.car_id == c.id|stringformat:"s" %} selected{% endif %}>{{ c.year }} {{ c.make }} {{ c.model }}{% if c.nickname %} ({{ c.nickname }}){% endif %}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="part-name">Part name</label>
+                <input type="text" id="part-name" name="part_name" value="{{ part_values.part_name|default:'' }}" required
+                       {% if part_errors.part_name %}aria-invalid="true" aria-describedby="part-name-error"{% endif %}>
+                {% if part_errors.part_name %}<p class="field-error" id="part-name-error">{{ part_errors.part_name }}</p>{% endif %}
+            </div>
+
+            <div class="field">
+                <label for="part-category">Category</label>
+                <select id="part-category" name="category">
+                    {% for key, label in categories %}
+                    <option value="{{ key }}"{% if part_values.category == key %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="part-link">Purchase link <span class="label-optional">optional</span></label>
+                <input type="url" id="part-link" name="part_link" inputmode="url" value="{{ part_values.part_link|default:'' }}"
+                       aria-describedby="{% if part_errors.part_link %}part-link-error{% else %}part-link-hint{% endif %}"
+                       {% if part_errors.part_link %}aria-invalid="true"{% endif %}>
+                {% if part_errors.part_link %}
+                <p class="field-error" id="part-link-error">{{ part_errors.part_link }}</p>
+                {% else %}
+                <p class="hint" id="part-link-hint">Paste the full address, including https://</p>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--block" data-loading="Saving part">Save part to log</button>
+            </div>
+        </form>
+        {% endif %}
+    </section>
+
+</div>
 
 {% endblock %}
