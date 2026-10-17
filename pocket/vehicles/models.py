@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.db import models
 
 
 class Car(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=50, blank=True)
     year = models.CharField(max_length=4)
     make = models.CharField(max_length=50)

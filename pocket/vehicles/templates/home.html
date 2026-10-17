@@ -195,7 +195,7 @@
             <input type="hidden" name="form_type" value="part">
 
             {% if part_errors.car_id or part_errors.category %}
-            <p class="field-error" role="alert">{{ part_errors.car_id|default:part_errors.category }}</p>
+            <p class="field-error" role="alert">{% firstof part_errors.car_id part_errors.category %}</p>
             {% endif %}
 
             <div class="field">

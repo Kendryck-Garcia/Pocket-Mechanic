@@ -142,9 +142,9 @@ def validate_car(data):
     return errors
 
 
-def validate_part(data):
+def validate_part(data, user):
     errors = {}
-    if not Car.objects.filter(id=data.get("car_id") or 0).exists():
+    if not Car.objects.filter(id=data.get("car_id") or 0, owner=user).exists():
         errors["car_id"] = "Choose a vehicle from your garage."
     if not data.get("part_name", "").strip():
         errors["part_name"] = "Enter the part name."
@@ -161,7 +161,7 @@ def validate_part(data):
 
 @login_required(login_url="my-login")
 def home(request):
-    cars = Car.objects.annotate(part_count=Count("part")).order_by("-id")
+    cars = Car.objects.filter(owner=request.user).annotate(part_count=Count("part")).order_by("-id")
     ai_results = []
     searched = False
     selected_car_id = None
@@ -177,6 +177,7 @@ def home(request):
             car_errors = validate_car(request.POST)
             if not car_errors:
                 car = Car.objects.create(
+                    owner=request.user,
                     nickname=request.POST.get("nickname", "").strip(),
                     year=request.POST["year"].strip(),
                     make=request.POST["make"].strip(),
@@ -187,7 +188,7 @@ def home(request):
 
         if form_type == "part":
             part_values = request.POST
-            part_errors = validate_part(request.POST)
+            part_errors = validate_part(request.POST, request.user)
             if not part_errors:
                 part = Part.objects.create(
                     car_id=request.POST["car_id"],
@@ -212,14 +213,14 @@ def home(request):
         if selected_car_id and query:
             searched = True
             try:
-                car = Car.objects.get(id=selected_car_id)
+                car = Car.objects.get(id=selected_car_id, owner=request.user)
                 ai_results = search_parts_with_serpapi(car, query)
             except Car.DoesNotExist:
                 ai_results = []
 
     context = {
         "cars": cars,
-        "total_parts": Part.objects.count(),
+        "total_parts": Part.objects.filter(car__owner=request.user).count(),
         "ai_results": ai_results,
         "searched": searched,
         "selected_car_id": selected_car_id,
@@ -243,7 +244,7 @@ def contact(request):
 
 @login_required(login_url="my-login")
 def saved(request):
-    parts = Part.objects.select_related("car").order_by("-id")
+    parts = Part.objects.select_related("car").filter(car__owner=request.user).order_by("-id")
     groups = [
         {"key": key, "label": label, "parts": [p for p in parts if p.category == key]}
         for key, label in Part.CATEGORY_CHOICES
@@ -254,7 +255,7 @@ def saved(request):
 @require_POST
 @login_required(login_url="my-login")
 def delete_part(request, part_id):
-    part = get_object_or_404(Part, id=part_id)
+    part = get_object_or_404(Part, id=part_id, car__owner=request.user)
     part.delete()
     messages.success(request, f"Removed {part.part_name}.")
     return redirect("saved")
