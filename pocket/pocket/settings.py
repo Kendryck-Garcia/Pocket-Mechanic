@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -141,6 +142,20 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# collectstatic writes content-hashed copies (main.<hash>.css) and {% static %}
+# links to them, so browsers fetch new CSS after every deploy instead of
+# reusing a cached copy. Tests run without collectstatic, so they keep plain names.
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {
+        'BACKEND': (
+            'django.contrib.staticfiles.storage.StaticFilesStorage'
+            if sys.argv[1:2] == ['test']
+            else 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+        ),
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
