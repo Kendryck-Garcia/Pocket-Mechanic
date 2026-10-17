@@ -1,4 +1,4 @@
-Django==4.2.0
+Django==5.2.18
 gunicorn==21.2.0
 python-dotenv==1.0.0
 requests==2.31.0

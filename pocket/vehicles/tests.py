@@ -1,26 +1,10 @@
-import sys
-from copy import copy
 from unittest import mock
 
 from django.contrib.auth.models import User
-from django.template.context import BaseContext
 from django.test import TestCase
 from django.urls import reverse
 
 from .models import Car, Part
-
-# Django 4.2 predates Python 3.14, where BaseContext.__copy__'s copy(super())
-# breaks and the test client crashes on every rendered template. Mirror the
-# fix Django shipped in 5.x until the project moves off 4.2.
-if sys.version_info >= (3, 14):
-    def _base_context_copy(self):
-        duplicate = BaseContext()
-        duplicate.__class__ = self.__class__
-        duplicate.__dict__ = copy(self.__dict__)
-        duplicate.dicts = self.dicts[:]
-        return duplicate
-
-    BaseContext.__copy__ = _base_context_copy
 
 
 class OwnerIsolationTests(TestCase):
@@ -98,3 +82,27 @@ class OwnerIsolationTests(TestCase):
             "ai_search": "1", "search_car_id": self.alice_car.id, "query": "brakes",
         })
         search.assert_called_once_with(self.alice_car, "brakes")
+
+    def test_non_numeric_car_id_is_a_form_error(self):
+        response = self.client.post(reverse("home"), {
+            "form_type": "part",
+            "car_id": "abc",
+            "part_name": "Wiper blades",
+            "category": "accessories",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("car_id", response.context["part_errors"])
+
+
+class AdminSmokeTests(TestCase):
+    def test_admin_pages_render(self):
+        admin = User.objects.create_superuser("root", password="pw-root-123")
+        car = Car.objects.create(owner=admin, year="2015", make="Mazda", model="Miata")
+        self.client.force_login(admin)
+        for url in [
+            reverse("admin:index"),
+            reverse("admin:vehicles_car_changelist"),
+            reverse("admin:vehicles_car_change", args=[car.id]),
+        ]:
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 200)

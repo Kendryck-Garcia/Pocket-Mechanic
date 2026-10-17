@@ -144,7 +144,8 @@ def validate_car(data):
 
 def validate_part(data, user):
     errors = {}
-    if not Car.objects.filter(id=data.get("car_id") or 0, owner=user).exists():
+    car_id = data.get("car_id", "")
+    if not (car_id.isdigit() and Car.objects.filter(id=car_id, owner=user).exists()):
         errors["car_id"] = "Choose a vehicle from your garage."
     if not data.get("part_name", "").strip():
         errors["part_name"] = "Enter the part name."
