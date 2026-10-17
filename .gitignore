@@ -28,3 +28,6 @@ staticfiles/
 .idea/
 .DS_Store
 Thumbs.db
+
+# AI agent skills (local tooling, not part of the app)
+.agents/

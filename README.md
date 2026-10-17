@@ -1,6 +1,6 @@
 # 🚗 Pocket Mechanic
 
-**Pocket Mechanic** is a clean, lightweight digital garage web app built to help everyday drivers and car enthusiasts track maintenance history, upcoming service schedules, and repair costs.
+**Pocket Mechanic** is a lightweight digital garage for everyday drivers and car enthusiasts. Register your vehicles, log the parts you've bought or plan to buy for each one, and search for parts that fit your exact year, make and model.
 
 🌐 **Live Demo**: [kendryckgarcia.pythonanywhere.com](https://kendryckgarcia.pythonanywhere.com)
 
@@ -8,19 +8,20 @@
 
 ## ✨ Features
 
-- 🚙 **Vehicle Management** — Add and manage your personal fleet in a centralized garage.
-- 🔧 **Maintenance Tracking** — Log completed services, repair dates, and total costs.
-- 📊 **Service Reminders** — Stay ahead of routine oil changes, tire rotations, and scheduled maintenance.
-- 🔍 **Live Parts Search** — Real-time automotive parts and price search powered by SerpAPI.
+- 🔐 **Private Garages** — Each account has its own vehicles and parts; nobody else can see or change them.
+- 🚙 **Vehicle Records** — Year, make, model and an optional nickname, with a running count of parts per vehicle.
+- 🔧 **Parts Log** — Save parts under Maintenance, Accessories or Modifications, with an optional purchase link.
+- 🔍 **Parts Search** — Search by part or symptom for a specific vehicle using SerpAPI, then save any result straight to your log. Without an API key it falls back to search links for AutoZone, RockAuto, Amazon and Advance Auto Parts.
+- 📁 **Saved Parts** — All your parts grouped by category, with one-click removal.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Python 3, Django 4.2
-- **Frontend**: HTML5, Vanilla CSS
-- **API**: SerpAPI (Google Search for automotive parts)
-- **Deployment**: PythonAnywhere, WhiteNoise, Gunicorn
+- **Backend**: Python 3.10+, Django 5.2 LTS, SQLite
+- **Frontend**: Django templates, vanilla CSS
+- **API**: SerpAPI (Google results for automotive parts)
+- **Deployment**: PythonAnywhere
 
 ---
 
@@ -64,6 +65,11 @@ python manage.py runserver
 ```
 
 Open `http://127.0.0.1:8000` in your browser.
+
+Run the tests with:
+```bash
+python manage.py test vehicles
+```
 
 ---
 
