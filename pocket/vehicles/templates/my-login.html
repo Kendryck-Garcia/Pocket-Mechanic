@@ -1,43 +1,19 @@
 {% extends "base.html" %}
 {% block page_title %}Sign in{% endblock %}
-{% block meta_description %}Sign in to your Pocket Mechanic garage terminal.{% endblock %}
+{% block meta_description %}Sign in to see your vehicles and saved parts.{% endblock %}
 
 {% block content %}
 
-<section class="view" aria-labelledby="login-heading">
-    <h1 id="login-heading">Sign in</h1>
+<div class="auth">
+    <div class="page-head">
+        <h1>Sign in</h1>
+        <p>Your vehicles and saved parts are where you left them.</p>
+    </div>
 
-    <form method="post" class="auth-form" novalidate>
-        {% csrf_token %}
-
-        {% if loginForm.errors or loginForm.non_field_errors %}
-        <div class="errorlist" role="alert" aria-live="assertive">
-            {{ loginForm.non_field_errors }}
-            {% for field in loginForm %}
-                {% if field.errors %}
-                    <p><strong>{{ field.label }}:</strong> {{ field.errors.0 }}</p>
-                {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {% for field in loginForm %}
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}
-                <div class="helptext">{{ field.help_text }}</div>
-            {% endif %}
-        {% endfor %}
-
-        <button type="submit" class="primary-btn full" id="login-submit-btn">
-            Sign in
-        </button>
-    </form>
-
-    <p class="auth-switch">
-        No account yet?
-        <a href="{% url 'register' %}">Create one</a>
-    </p>
-</section>
+    <section class="tile" aria-label="Sign in form">
+        {% include "partials/auth_form.html" with form=loginForm submit_label="Sign in" loading_label="Signing in" %}
+        <p class="auth__switch">No account yet? <a href="{% url 'register' %}">Create one</a></p>
+    </section>
+</div>
 
 {% endblock %}

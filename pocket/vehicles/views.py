@@ -6,6 +6,11 @@ from pathlib import Path
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
+from django.db.models import Count
+from django.views.decorators.http import require_POST
 from .forms import CreateUserForm, LoginForm
 
 # Securely load API key from .env
@@ -125,35 +130,73 @@ def user_logout(request):
     logout(request)
     return redirect("my-login")
 
+def validate_car(data):
+    errors = {}
+    year = data.get("year", "").strip()
+    if not (year.isdigit() and 1900 <= int(year) <= 2099):
+        errors["year"] = "Enter a four-digit year between 1900 and 2099."
+    if not data.get("make", "").strip():
+        errors["make"] = "Enter the manufacturer."
+    if not data.get("model", "").strip():
+        errors["model"] = "Enter the model."
+    return errors
+
+
+def validate_part(data):
+    errors = {}
+    if not Car.objects.filter(id=data.get("car_id") or 0).exists():
+        errors["car_id"] = "Choose a vehicle from your garage."
+    if not data.get("part_name", "").strip():
+        errors["part_name"] = "Enter the part name."
+    if data.get("category") not in dict(Part.CATEGORY_CHOICES):
+        errors["category"] = "Choose a category."
+    link = data.get("part_link", "").strip()
+    if link:
+        try:
+            URLValidator()(link)
+        except ValidationError:
+            errors["part_link"] = "Enter a full link starting with https://"
+    return errors
+
+
 @login_required(login_url="my-login")
 def home(request):
-    cars = Car.objects.all()
+    cars = Car.objects.annotate(part_count=Count("part")).order_by("-id")
     ai_results = []
+    searched = False
     selected_car_id = None
     query = ""
-
+    car_errors, part_errors = {}, {}
+    car_values, part_values = {}, {}
 
     if request.method == "POST":
         form_type = request.POST.get("form_type")
 
         if form_type == "car":
-            Car.objects.create(
-                nickname=request.POST.get("nickname"),
-                year=request.POST.get("year"),
-                make=request.POST.get("make"),
-                model=request.POST.get("model"),
-            )
-            return redirect("home")
+            car_values = request.POST
+            car_errors = validate_car(request.POST)
+            if not car_errors:
+                car = Car.objects.create(
+                    nickname=request.POST.get("nickname", "").strip(),
+                    year=request.POST["year"].strip(),
+                    make=request.POST["make"].strip(),
+                    model=request.POST["model"].strip(),
+                )
+                messages.success(request, f"{car} is in your garage.")
+                return redirect("home")
 
         if form_type == "part":
-            Part.objects.create(
-                car_id=request.POST.get("car_id"),
-                part_name=request.POST.get("part_name"),
-                category=request.POST.get("category", "maintenance"),
-                part_link=request.POST.get("part_link"),
-            )
-            return redirect("home")
-
+            part_values = request.POST
+            part_errors = validate_part(request.POST)
+            if not part_errors:
+                part = Part.objects.create(
+                    car_id=request.POST["car_id"],
+                    part_name=request.POST["part_name"].strip(),
+                    category=request.POST["category"],
+                    part_link=request.POST.get("part_link", "").strip(),
+                )
+                messages.success(request, f"Saved {part.part_name} to {part.get_category_display().lower()}.")
+                return redirect("home")
 
     if request.GET.get("ai_search"):
         raw_car_id = request.GET.get("search_car_id")
@@ -167,6 +210,7 @@ def home(request):
                 selected_car_id = None
 
         if selected_car_id and query:
+            searched = True
             try:
                 car = Car.objects.get(id=selected_car_id)
                 ai_results = search_parts_with_serpapi(car, query)
@@ -175,9 +219,16 @@ def home(request):
 
     context = {
         "cars": cars,
+        "total_parts": Part.objects.count(),
         "ai_results": ai_results,
+        "searched": searched,
         "selected_car_id": selected_car_id,
         "query": query,
+        "car_errors": car_errors,
+        "part_errors": part_errors,
+        "car_values": car_values,
+        "part_values": part_values,
+        "categories": Part.CATEGORY_CHOICES,
     }
 
     return render(request, "home.html", context)
@@ -192,17 +243,18 @@ def contact(request):
 
 @login_required(login_url="my-login")
 def saved(request):
-    parts = Part.objects.select_related("car").filter(car__in=Car.objects.all())
-    context = {
-        "parts": parts,
-        "maintenance_count": parts.filter(category="maintenance").count(),
-        "accessories_count": parts.filter(category="accessories").count(),
-        "mods_count": parts.filter(category="mods").count(),
-    }
+    parts = Part.objects.select_related("car").order_by("-id")
+    groups = [
+        {"key": key, "label": label, "parts": [p for p in parts if p.category == key]}
+        for key, label in Part.CATEGORY_CHOICES
+    ]
+    context = {"groups": groups, "total": len(parts)}
     return render(request, "saved.html", context)
 
+@require_POST
 @login_required(login_url="my-login")
 def delete_part(request, part_id):
     part = get_object_or_404(Part, id=part_id)
     part.delete()
+    messages.success(request, f"Removed {part.part_name}.")
     return redirect("saved")

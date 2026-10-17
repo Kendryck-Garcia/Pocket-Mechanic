@@ -1,0 +1,25 @@
+<form class="form" method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="errorlist" role="alert">
+        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% for field in form %}
+    <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <p class="field-error" id="{{ field.id_for_label }}-error">{{ field.errors.0 }}</p>
+        {% elif field.help_text %}
+        <div class="helptext" id="{{ field.id_for_label }}-hint">{{ field.help_text|safe }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn--primary btn--block" data-loading="{{ loading_label }}">{{ submit_label }}</button>
+    </div>
+</form>
